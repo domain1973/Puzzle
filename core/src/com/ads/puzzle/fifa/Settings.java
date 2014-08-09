@@ -27,6 +27,7 @@ public class Settings {
 
     public static void load() {
         try {
+            Answer.gateStars.add(0);
             FileHandle filehandle = Gdx.files.external(file);
             String[] strings = filehandle.readString().split("\n");
             soundEnabled = Boolean.parseBoolean(strings[0]);

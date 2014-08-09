@@ -191,11 +191,6 @@ public class GameScreen extends BaseScreen {
             };
             executor.schedule(runner, 1500, TimeUnit.MILLISECONDS);
             isPass = true;
-            if (Answer.gateStars.size() > challengeCtrl.getGateNum()) {
-                Answer.gateStars.set(challengeCtrl.getGateNum(), 2);
-            } else {
-                Answer.gateStars.add(1);
-            }
         }
     }
 

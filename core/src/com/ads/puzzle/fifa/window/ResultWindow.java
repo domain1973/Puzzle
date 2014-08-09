@@ -1,5 +1,6 @@
 package com.ads.puzzle.fifa.window;
 
+import com.ads.puzzle.fifa.Answer;
 import com.ads.puzzle.fifa.Assets;
 import com.ads.puzzle.fifa.controller.AreaController;
 import com.ads.puzzle.fifa.controller.ChallengeController;
@@ -104,15 +105,20 @@ public class ResultWindow extends BaseWindow {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 layerBg.remove();
+
                 Group group = gameScreen.getStage().getRoot();
                 ((AreaController) group.findActor(IController.AREA_CTRL)).handler();
-                ChallengeController challengeController = (ChallengeController) group.findActor(IController.CHALLENGE_CTRL);
-                challengeController.handler();
+                ChallengeController challengeCtrl = (ChallengeController) group.findActor(IController.CHALLENGE_CTRL);
+                Answer.gateStars.set(challengeCtrl.getGateNum(), 3);
+                challengeCtrl.handler();
                 ((PieceController) group.findActor(IController.PIECE_CTRL)).handler();
-                int gateNum = challengeController.getGateNum();
+                int gateNum = challengeCtrl.getGateNum();
                 if (gateNum > gameScreen.getGame().getPassGateNum()) {
                     gameScreen.getGame().setPassGateNum(gateNum);
                 }
+                if (Answer.gateStars.size() <= gateNum) {
+                    Answer.gateStars.add(1);
+                } 
                 ResultWindow.this.remove();
                 gameScreen.return2init();
                 super.touchUp(event, x, y, pointer, button);
