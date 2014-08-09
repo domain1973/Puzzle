@@ -1,0 +1,27 @@
+font.name=经典趣体简
+font.size=32
+font.bold=false
+font.italic=false
+
+pad.top=0
+pad.right=0
+pad.bottom=0
+pad.left=0
+pad.advance.x=0
+pad.advance.y=0
+
+glyph.native.rendering=false
+glyph.page.width=512
+glyph.page.height=512
+glyph.text=:0123456789/总计你是天才!开始选项
+
+effect.class=com.badlogic.gdx.tools.hiero.unicodefont.effects.ColorEffect
+effect.Color=ffcc00
+
+effect.class=com.badlogic.gdx.tools.hiero.unicodefont.effects.GradientEffect
+effect.Top color=ffffff
+effect.Bottom color=ffcc99
+effect.Offset=0
+effect.Scale=1.0
+effect.Cyclic=false
+
