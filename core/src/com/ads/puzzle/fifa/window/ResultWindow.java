@@ -109,7 +109,7 @@ public class ResultWindow extends BaseWindow {
                 Group group = gameScreen.getStage().getRoot();
                 ((AreaController) group.findActor(IController.AREA_CTRL)).handler();
                 ChallengeController challengeCtrl = (ChallengeController) group.findActor(IController.CHALLENGE_CTRL);
-                Answer.gateStars.set(challengeCtrl.getGateNum(), 3);
+                setStarNum(challengeCtrl);
                 challengeCtrl.handler();
                 ((PieceController) group.findActor(IController.PIECE_CTRL)).handler();
                 int gateNum = challengeCtrl.getGateNum();
@@ -117,11 +117,22 @@ public class ResultWindow extends BaseWindow {
                     gameScreen.getGame().setPassGateNum(gateNum);
                 }
                 if (Answer.gateStars.size() <= gateNum) {
-                    Answer.gateStars.add(1);
+                    Answer.gateStars.add(0);
                 } 
                 ResultWindow.this.remove();
                 gameScreen.return2init();
                 super.touchUp(event, x, y, pointer, button);
+            }
+
+            private void setStarNum(ChallengeController challengeCtrl) {
+                int starNum = 1;
+                int minute = gameScreen.getSeconds()/60;
+                if (minute <= 3) {
+                    starNum = 3;
+                } else if (minute > 3 && minute <= 6) {
+                    starNum = 2;
+                }
+                Answer.gateStars.set(challengeCtrl.getGateNum(), starNum);
             }
         });
     }

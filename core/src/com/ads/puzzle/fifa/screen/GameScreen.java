@@ -45,6 +45,13 @@ public class GameScreen extends BaseScreen {
     private InputMultiplexer multiplexer;
     private Actor[] pieces;
 
+    private boolean isUsedHelp;
+    private boolean isUsingHelp = true;
+    private ScheduledExecutorService executStarCount;
+    private ParticleEffect effect;
+    private int areaId;
+    private String timeStr;
+
     public GameScreen(Puzzle game, int level, int gateNum) {
         super(game);
         this.level = level;
@@ -55,6 +62,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
+        timeStr = "00:00";
         areaCtrl = new AreaController(level, IController.AREA_CTRL);
         addActor(areaCtrl);
         pieceCtrl = new PieceController(IController.PIECE_CTRL);
@@ -71,12 +79,13 @@ public class GameScreen extends BaseScreen {
 
         createTopBar();
         initEffect();
+        countTime();
     }
 
     private void createTopBar() {
-        ImageButton help = new ImageButton(new TextureRegionDrawable(Assets.help));
-        help.setBounds(0, y_bar, Assets.TOPBAR_HEIGHT, Assets.TOPBAR_HEIGHT);
-        addActor(help);
+//        ImageButton help = new ImageButton(new TextureRegionDrawable(Assets.help));
+//        help.setBounds(0, y_bar, Assets.TOPBAR_HEIGHT, Assets.TOPBAR_HEIGHT);
+//        addActor(help);
         ImageButton unlock = new ImageButton(new TextureRegionDrawable(Assets.unlock));
         unlock.setBounds(Gdx.graphics.getWidth() - 3 * Assets.TOPBAR_HEIGHT, y_bar, Assets.TOPBAR_HEIGHT, Assets.TOPBAR_HEIGHT);
         unlock.addListener(new InputListener() {
@@ -115,12 +124,6 @@ public class GameScreen extends BaseScreen {
         addActor(menu);
     }
 
-    private boolean isUsedHelp;
-    private boolean isUsingHelp = true;
-    private ScheduledExecutorService executStarCount;
-    private ParticleEffect effect;
-    private int areaId;
-
     private void initEffect() {
         effect = new ParticleEffect();
         effect.load(Gdx.files.internal("data/test.p"), Gdx.files.internal("data/"));
@@ -136,6 +139,9 @@ public class GameScreen extends BaseScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+        batch.begin();
+        font.draw(batch, timeStr, 0, Assets.HEIGHT);
+        batch.end();
         handleHelp();
         handlePass();
     }
@@ -184,6 +190,7 @@ public class GameScreen extends BaseScreen {
     private void handleGate() {
         if (gestureDetector.isPass(challengeCtrl.getGateNum())) {
             Gdx.input.setInputProcessor(null);
+            executTime.shutdown();
             Runnable runner = new Runnable() {
                 public void run() {
                     openResultWin = true; //关卡结束
@@ -192,6 +199,33 @@ public class GameScreen extends BaseScreen {
             executor.schedule(runner, 1500, TimeUnit.MILLISECONDS);
             isPass = true;
         }
+    }
+
+    private int seconds;
+    private ScheduledExecutorService executTime;
+    private void countTime() {
+        seconds = 0;
+        executTime = Executors.newSingleThreadScheduledExecutor();
+        executTime.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                seconds++; //
+                buildTimeStr();
+            }
+
+            private void buildTimeStr() {
+                String str0 = "%d";
+                String str1 = "%d";
+                int minute = seconds / 60;
+                int second = seconds % 60;
+                if (minute < 10) {
+                    str0 = "0%d";
+                }
+                if (second < 10) {
+                    str1 = "0%d";
+                }
+                timeStr = String.format(str0 + ":" + str1, minute, second);
+            }
+        }, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -205,9 +239,14 @@ public class GameScreen extends BaseScreen {
 
     public void return2init() {
         isPass = false;
+        countTime();
     }
 
     public void useHelp() {
         isUsedHelp = true;
+    }
+
+    public int getSeconds() {
+        return seconds;
     }
 }
