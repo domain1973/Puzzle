@@ -38,12 +38,14 @@ public class ResultWindow extends BaseWindow {
     private ScheduledExecutorService executStarCount;
     private ParticleEffect effect;
     private int starIndex;
-    private int starNum = 5;
+    private int starNum = 1;
     private boolean exeTimer = false;
     private boolean end = false;
     private ImageButton suspend;
     private ImageButton refresh;
     private ImageButton next;
+    private Group group;
+    private ChallengeController challengeCtrl;
 
     public ResultWindow(GameScreen gameScreen) {
         super("你是天才!", new Window.WindowStyle(gameScreen.getFont(), Color.WHITE, new TextureRegionDrawable(
@@ -57,6 +59,7 @@ public class ResultWindow extends BaseWindow {
         w = Assets.WIDTH * 4 / 5;
         x = (Assets.WIDTH - w) / 2;
         y = (Assets.HEIGHT - w) / 2;
+        space = w / 5;
         setBounds(x, y, w, w);
         addButtons();
         addListeners();
@@ -65,19 +68,21 @@ public class ResultWindow extends BaseWindow {
         addActor(refresh);
         addActor(next);
         initEffect();
+        group = gameScreen.getStage().getRoot();
+        challengeCtrl = (ChallengeController) group.findActor(IController.CHALLENGE_CTRL);
+        setStarNum(challengeCtrl);
         Gdx.input.setInputProcessor(gameScreen.getStage());
     }
 
     private void addButtons() {
-        space = w / 12;
-        float star_w = space * 3f;
-        float v = (w - star_w) / 2;
+        float btn_size = space;
+        float v = (w - btn_size) / 2;
         suspend = new ImageButton(new TextureRegionDrawable(Assets.suspendBtn), new TextureRegionDrawable(Assets.suspendBtn));
-        suspend.setBounds(v - star_w, 0, star_w, star_w);
+        suspend.setBounds(v - btn_size, 0, btn_size, btn_size);
         refresh = new ImageButton(new TextureRegionDrawable(Assets.musicBtn), new TextureRegionDrawable(Assets.musicBtn));
-        refresh.setBounds(v, 0, star_w, star_w);
+        refresh.setBounds(v, 0, btn_size, btn_size);
         next = new ImageButton(new TextureRegionDrawable(Assets.nextBtn), new TextureRegionDrawable(Assets.nextBtn));
-        next.setBounds(v + star_w, 0, star_w, star_w);
+        next.setBounds(v + btn_size, 0, btn_size, btn_size);
     }
 
     private void addListeners() {
@@ -105,11 +110,7 @@ public class ResultWindow extends BaseWindow {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 layerBg.remove();
-
-                Group group = gameScreen.getStage().getRoot();
                 ((AreaController) group.findActor(IController.AREA_CTRL)).handler();
-                ChallengeController challengeCtrl = (ChallengeController) group.findActor(IController.CHALLENGE_CTRL);
-                setStarNum(challengeCtrl);
                 challengeCtrl.handler();
                 ((PieceController) group.findActor(IController.PIECE_CTRL)).handler();
                 int gateNum = challengeCtrl.getGateNum();
@@ -123,18 +124,17 @@ public class ResultWindow extends BaseWindow {
                 gameScreen.return2init();
                 super.touchUp(event, x, y, pointer, button);
             }
-
-            private void setStarNum(ChallengeController challengeCtrl) {
-                int starNum = 1;
-                int minute = gameScreen.getSeconds()/60;
-                if (minute <= 3) {
-                    starNum = 3;
-                } else if (minute > 3 && minute <= 6) {
-                    starNum = 2;
-                }
-                Answer.gateStars.set(challengeCtrl.getGateNum(), starNum);
-            }
         });
+    }
+
+    private void setStarNum(ChallengeController challengeCtrl) {
+        int minute = gameScreen.getSeconds()/60;
+        if (minute <= 3) {
+            starNum = 3;
+        } else if (minute > 3 && minute <= 6) {
+            starNum = 2;
+        }
+        Answer.gateStars.set(challengeCtrl.getGateNum(), starNum);
     }
 
     private void initEffect() {
@@ -143,14 +143,14 @@ public class ResultWindow extends BaseWindow {
     }
 
     private void addStars() {
-        float star_w = space * 2f;
+        float star_w = space;
         float v = (w - star_w) / 2;
-        star_nulls = new Image[5];
-        stars = new Image[5];
-        for (int i = 0; i < 5; i++) {
+        star_nulls = new Image[3];
+        stars = new Image[3];
+        for (int i = 0; i < 3; i++) {
             star_nulls[i] = new Image(Assets.star_null);
             stars[i] = new Image(Assets.star);
-            int t = i - 2;
+            int t = i - 1;
             star_nulls[i].setBounds(v + t * star_w, w * 3 / 5, star_w, star_w);
             stars[i].setBounds(v + t * star_w, w * 3 / 5, star_w, star_w);
             addActor(star_nulls[i]);
