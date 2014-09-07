@@ -16,10 +16,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class GateScreen extends OtherScreen {
     private static final int GATE_MAX = 12;
     private int level;
+    private int starNum;
+    private float x_num;
+    private float y_num;
 
-    public GateScreen(Puzzle game, int level) {
-        super(game);
+    public GateScreen(Puzzle puzzle, int level) {
+        super(puzzle);
         this.level = level;
+        x_num = Assets.WIDTH - 2 * Assets.TOPBAR_HEIGHT;
+        y_num = Assets.HEIGHT - 5;
     }
 
     @Override
@@ -31,8 +36,10 @@ public class GateScreen extends OtherScreen {
         for (int i = 0; i < GATE_MAX; i++) {
             int gateNum = level * GATE_MAX + i;
             TextureRegion gateTRegion = null;
-            if (game.getPassGateNum() >= gateNum || gateNum == 0) {
-                switch (Answer.gateStars.get(gateNum)) {
+            if (getPuzzle().getPassGateNum() >= gateNum || gateNum == 0) {
+                int num = Answer.gateStars.get(gateNum);
+                starNum = starNum + num;
+                switch (num) {
                     case 0:
                         gateTRegion = Assets.gate_0star;
                         break;
@@ -57,8 +64,8 @@ public class GateScreen extends OtherScreen {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y,
                                          int pointer, int button) {
-                    if (gate.getGateNum() <= game.getPassGateNum()) {
-                        game.setScreen(new GameScreen(game, level, gate.getGateNum()));
+                    if (gate.getGateNum() <= getPuzzle().getPassGateNum()) {
+                        getPuzzle().setScreen(new GameScreen(getPuzzle(), level, gate.getGateNum()));
                     }
                     return true;
                 }
@@ -69,7 +76,7 @@ public class GateScreen extends OtherScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y,
                                      int pointer, int button) {
-                game.setScreen(new LevelScreen(game));
+                getPuzzle().setScreen(new LevelScreen(getPuzzle()));
                 return true;
             }
         });
@@ -78,8 +85,8 @@ public class GateScreen extends OtherScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        batch.begin();
-        font.draw(batch, "0/36", Gdx.graphics.getWidth() - 2 * Assets.TOPBAR_HEIGHT, Gdx.graphics.getHeight() - 10);
-        batch.end();
+        getBatch().begin();
+        getFont().draw(getBatch(), starNum + "/36", x_num, y_num);
+        getBatch().end();
     }
 }

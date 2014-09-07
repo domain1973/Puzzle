@@ -22,8 +22,8 @@ public class LevelListener extends GestureDetector.GestureAdapter {
     private Vector3 touchPoint;
     //用来标记第一大关图片的位置，可以为负，无法显示的部分就不会被画出
     private float position;
-    //用来存储长和宽的值
-    private int max;
+    private float prex;
+    private float currentx;
 
     public LevelListener(Stage stage, Puzzle game) {
         this.stage = stage;
@@ -67,13 +67,9 @@ public class LevelListener extends GestureDetector.GestureAdapter {
         return false;
     }
 
-    float prex;
-    float currentx;
-
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
         //position应该有一定的范围
-        System.out.println(position);
         float m = -(Assets.levels.size() - 1) * Assets.LEVEL_IMAGE_SIZE;
         if (position <= 0 && position >= m) {
             prex = currentx;

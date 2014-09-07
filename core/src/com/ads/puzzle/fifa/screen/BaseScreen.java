@@ -15,27 +15,28 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
  * Created by Administrator on 2014/7/21.
  */
 public class BaseScreen extends ScreenAdapter {
-    protected Stage stage;
-    protected Batch batch;
-    protected Puzzle game;
-    protected BitmapFont font;
-    protected float y_bar;
+    private Stage stage;
+    private Batch batch;
+    private Puzzle puzzle;
+    private BitmapFont font;
+    private BitmapFont gameFont;
+    private float y_bar;
 
     public BaseScreen(Puzzle game) {
         stage = new Stage();
-        this.game = game;
-        y_bar = Gdx.graphics.getHeight() - Assets.TOPBAR_HEIGHT;
+        puzzle = game;
+        y_bar = Assets.HEIGHT - Assets.TOPBAR_HEIGHT;
         batch = stage.getBatch();
         font = new BitmapFont(Gdx.files.internal("other.fnt"),
                 Gdx.files.internal("other.png"), false);
+        gameFont = new BitmapFont(Gdx.files.internal("puzzle.fnt"),
+                Gdx.files.internal("puzzle.png"), false);
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage); // 设置输入接收器
-        Image bgImg = new Image(Assets.gameBg);
-        bgImg.setScale(Assets.WIDTH / (float) Assets.gameBg.getRegionWidth(), Assets.HEIGHT / (float) Assets.gameBg.getRegionHeight());
-        stage.addActor(bgImg);
+        stage.addActor(new Image(Assets.gameBg));
     }
 
     protected void addActor(Actor actor) {
@@ -50,15 +51,27 @@ public class BaseScreen extends ScreenAdapter {
         stage.draw();
     }
 
-    public Puzzle getGame() {
-        return game;
+    public Puzzle getPuzzle() {
+        return puzzle;
     }
 
     public BitmapFont getFont() {
         return font;
     }
 
+    public BitmapFont getGameFont() {
+        return gameFont;
+    }
+
     public Stage getStage() {
         return stage;
+    }
+
+    public Batch getBatch() {
+        return batch;
+    }
+
+    public float getY_bar() {
+        return y_bar;
     }
 }

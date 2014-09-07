@@ -24,6 +24,7 @@ public class Settings {
     public static boolean soundEnabled = true;
     public final static int[] highscores = new int[]{100, 80, 50, 30, 10};
     public final static String file = ".puzzle";
+    private static int lights = 5;
 
     public static void load() {
         try {
@@ -59,5 +60,17 @@ public class Settings {
                 break;
             }
         }
+    }
+
+    public static void sublight() {
+        lights --;
+    }
+
+    public static void addlight() {
+        lights ++;
+    }
+
+    public static int getLights() {
+        return lights;
     }
 }

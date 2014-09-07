@@ -41,7 +41,7 @@ public class ResultWindow extends BaseWindow {
     private int starNum = 1;
     private boolean exeTimer = false;
     private boolean end = false;
-    private ImageButton suspend;
+    private ImageButton gateBtn;
     private ImageButton refresh;
     private ImageButton next;
     private Group group;
@@ -64,7 +64,7 @@ public class ResultWindow extends BaseWindow {
         addButtons();
         addListeners();
         addStars();
-        addActor(suspend);
+        addActor(gateBtn);
         addActor(refresh);
         addActor(next);
         initEffect();
@@ -77,16 +77,16 @@ public class ResultWindow extends BaseWindow {
     private void addButtons() {
         float btn_size = space;
         float v = (w - btn_size) / 2;
-        suspend = new ImageButton(new TextureRegionDrawable(Assets.suspendBtn), new TextureRegionDrawable(Assets.suspendBtn));
-        suspend.setBounds(v - btn_size, 0, btn_size, btn_size);
-        refresh = new ImageButton(new TextureRegionDrawable(Assets.musicBtn), new TextureRegionDrawable(Assets.musicBtn));
+        gateBtn = new ImageButton(new TextureRegionDrawable(Assets.gate), new TextureRegionDrawable(Assets.gate));
+        gateBtn.setBounds(v - btn_size, 0, btn_size, btn_size);
+        refresh = new ImageButton(new TextureRegionDrawable(Assets.refresh), new TextureRegionDrawable(Assets.refresh));
         refresh.setBounds(v, 0, btn_size, btn_size);
-        next = new ImageButton(new TextureRegionDrawable(Assets.nextBtn), new TextureRegionDrawable(Assets.nextBtn));
+        next = new ImageButton(new TextureRegionDrawable(Assets.next), new TextureRegionDrawable(Assets.next));
         next.setBounds(v + btn_size, 0, btn_size, btn_size);
     }
 
     private void addListeners() {
-        suspend.addListener(new InputListener() {
+        gateBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y,
                                      int pointer, int button) {
@@ -96,7 +96,7 @@ public class ResultWindow extends BaseWindow {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 layerBg.remove();
-                gameScreen.getGame().setScreen(new GateScreen(gameScreen.getGame(), gameScreen.getLevel()));
+                gameScreen.getPuzzle().setScreen(new GateScreen(gameScreen.getPuzzle(), gameScreen.getLevel()));
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -114,8 +114,8 @@ public class ResultWindow extends BaseWindow {
                 challengeCtrl.handler();
                 ((PieceController) group.findActor(IController.PIECE_CTRL)).handler();
                 int gateNum = challengeCtrl.getGateNum();
-                if (gateNum > gameScreen.getGame().getPassGateNum()) {
-                    gameScreen.getGame().setPassGateNum(gateNum);
+                if (gateNum > gameScreen.getPuzzle().getPassGateNum()) {
+                    gameScreen.getPuzzle().setPassGateNum(gateNum);
                 }
                 if (Answer.gateStars.size() <= gateNum) {
                     Answer.gateStars.add(0);

@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.SnapshotArray;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,7 +45,7 @@ public class PieceDetector extends GestureDetector {
 
         PieceController pieceController = (PieceController) stage.getRoot().findActor(IController.PIECE_CTRL);
         SnapshotArray<Actor> actors = pieceController.getChildren();
-        Integer[] temps = Answer.challenges[gateNum];
+        Integer[] temps = Answer.CHALLENGES[gateNum];
         List<Integer> challengeIDs = new ArrayList<Integer>();
         for (Integer temp : temps) {
             challengeIDs.add(temp);

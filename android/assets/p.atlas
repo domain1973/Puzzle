@@ -1,49 +1,56 @@
 
 p.png
-size: 1016,1014
+size: 1021,1014
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 100
   rotate: false
-  xy: 754, 14
+  xy: 816, 14
   size: 66, 68
   orig: 66, 68
   offset: 0, 0
   index: -1
 101
   rotate: false
-  xy: 822, 14
+  xy: 884, 14
   size: 66, 68
   orig: 66, 68
   offset: 0, 0
   index: -1
 102
   rotate: false
-  xy: 906, 232
+  xy: 952, 150
   size: 66, 68
   orig: 66, 68
   offset: 0, 0
   index: -1
 103
   rotate: false
-  xy: 906, 162
+  xy: 952, 18
   size: 66, 68
   orig: 66, 68
   offset: 0, 0
   index: -1
-104
+about
   rotate: false
-  xy: 906, 92
-  size: 66, 68
-  orig: 66, 68
+  xy: 754, 540
+  size: 150, 150
+  orig: 150, 150
   offset: 0, 0
   index: -1
-buy
+challenge
   rotate: false
-  xy: 952, 30
-  size: 60, 60
-  orig: 60, 60
+  xy: 906, 220
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+continue
+  rotate: false
+  xy: 754, 388
+  size: 150, 150
+  orig: 150, 150
   offset: 0, 0
   index: -1
 gamebg
@@ -51,6 +58,13 @@ gamebg
   xy: 2, 14
   size: 750, 1000
   orig: 750, 1000
+  offset: 0, 0
+  index: -1
+gate
+  rotate: false
+  xy: 754, 236
+  size: 150, 150
+  orig: 150, 150
   offset: 0, 0
   index: -1
 gate_0star
@@ -90,16 +104,23 @@ gate_lock
   index: -1
 gatestar
   rotate: false
-  xy: 974, 268
+  xy: 988, 268
   size: 33, 32
   orig: 33, 32
   offset: 0, 0
   index: -1
 gatestar_null
   rotate: false
-  xy: 974, 235
+  xy: 988, 235
   size: 33, 31
   orig: 33, 31
+  offset: 0, 0
+  index: -1
+help
+  rotate: false
+  xy: 754, 84
+  size: 150, 150
+  orig: 150, 150
   offset: 0, 0
   index: -1
 layerbg
@@ -125,23 +146,23 @@ levelpre
   index: -1
 lock
   rotate: false
-  xy: 890, 12
+  xy: 754, 12
   size: 60, 70
   orig: 60, 70
   offset: 0, 0
   index: -1
-music
+no
   rotate: false
-  xy: 754, 540
-  size: 150, 150
-  orig: 150, 150
+  xy: 968, 98
+  size: 50, 50
+  orig: 50, 50
   offset: 0, 0
   index: -1
-next
+recommend
   rotate: false
-  xy: 754, 388
-  size: 150, 150
-  orig: 150, 150
+  xy: 906, 88
+  size: 60, 60
+  orig: 60, 60
   offset: 0, 0
   index: -1
 star
@@ -158,219 +179,272 @@ star_null
   orig: 100, 100
   offset: 0, 0
   index: -1
-start
-  rotate: false
-  xy: 754, 236
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-stopmusic
-  rotate: false
-  xy: 754, 84
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
 winbg
   rotate: false
-  xy: 952, 18
+  xy: 14, 2
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 
 p2.png
-size: 996,973
+size: 1016,1016
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+104
+  rotate: false
+  xy: 2, 11
+  size: 66, 68
+  orig: 66, 68
+  offset: 0, 0
+  index: -1
+about_small
+  rotate: false
+  xy: 2, 306
+  size: 480, 710
+  orig: 480, 710
+  offset: 0, 0
+  index: -1
 btn0
   rotate: false
-  xy: 2, 216
+  xy: 70, 24
   size: 292, 55
   orig: 292, 55
   offset: 0, 0
   index: -1
 btn01
   rotate: false
-  xy: 704, 918
+  xy: 364, 24
   size: 292, 55
   orig: 292, 55
   offset: 0, 0
   index: -1
-help
+dlgbg
   rotate: false
-  xy: 2, 2
-  size: 60, 60
-  orig: 60, 60
+  xy: 2, 81
+  size: 462, 223
+  orig: 462, 223
   offset: 0, 0
   index: -1
-menu
+light
   rotate: false
-  xy: 844, 716
-  size: 60, 60
-  orig: 60, 60
+  xy: 466, 154
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+muisc
+  rotate: false
+  xy: 618, 154
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+next
+  rotate: false
+  xy: 658, 2
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+nomuisc
+  rotate: false
+  xy: 770, 154
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+nosound
+  rotate: false
+  xy: 810, 2
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+ok
+  rotate: false
+  xy: 966, 966
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+readme_small
+  rotate: false
+  xy: 484, 306
+  size: 480, 710
+  orig: 480, 710
+  offset: 0, 0
+  index: -1
+
+p3.png
+size: 1018,1014
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+area
+  rotate: false
+  xy: 2, 52
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+refresh
+  rotate: false
+  xy: 564, 462
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+result
+  rotate: false
+  xy: 2, 454
+  size: 560, 560
+  orig: 560, 560
+  offset: 0, 0
+  index: -1
+return
+  rotate: false
+  xy: 716, 462
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+s0
+  rotate: false
+  xy: 564, 614
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+setting
+  rotate: false
+  xy: 786, 310
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+share
+  rotate: false
+  xy: 868, 462
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+sound
+  rotate: false
+  xy: 786, 158
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+suspend
+  rotate: false
+  xy: 786, 6
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+theme_small
+  rotate: false
+  xy: 404, 2
+  size: 380, 450
+  orig: 380, 450
+  offset: 0, 0
+  index: -1
+
+p4.png
+size: 964,1004
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+nosos
+  rotate: false
+  xy: 2, 40
+  size: 280, 100
+  orig: 280, 100
   offset: 0, 0
   index: -1
 piece0
   rotate: false
-  xy: 704, 778
+  xy: 284, 2
   size: 138, 138
   orig: 138, 138
   offset: 0, 0
   index: -1
 piece1
   rotate: false
-  xy: 154, 76
+  xy: 424, 2
   size: 138, 138
   orig: 138, 138
   offset: 0, 0
   index: -1
 piece2
   rotate: false
-  xy: 704, 638
+  xy: 564, 2
   size: 138, 138
   orig: 138, 138
   offset: 0, 0
   index: -1
 piece3
   rotate: false
-  xy: 844, 778
+  xy: 704, 2
   size: 138, 138
   orig: 138, 138
   offset: 0, 0
   index: -1
-refresh
-  rotate: false
-  xy: 704, 450
-  size: 60, 60
-  orig: 60, 60
-  offset: 0, 0
-  index: -1
-returnMenu
-  rotate: false
-  xy: 704, 512
-  size: 124, 124
-  orig: 124, 124
-  offset: 0, 0
-  index: -1
-s0
-  rotate: false
-  xy: 2, 273
-  size: 700, 700
-  orig: 700, 700
-  offset: 0, 0
-  index: -1
-suspend
-  rotate: false
-  xy: 2, 64
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-unlock
-  rotate: false
-  xy: 64, 2
-  size: 60, 60
-  orig: 60, 60
-  offset: 0, 0
-  index: -1
-
-p3.png
-size: 702,702
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 s1
   rotate: false
-  xy: 2, 2
-  size: 700, 700
-  orig: 700, 700
+  xy: 2, 142
+  size: 400, 400
+  orig: 400, 400
   offset: 0, 0
   index: -1
-
-p4.png
-size: 702,702
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 s2
   rotate: false
-  xy: 2, 2
-  size: 700, 700
-  orig: 700, 700
+  xy: 564, 604
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+s3
+  rotate: false
+  xy: 404, 142
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+theme_big
+  rotate: false
+  xy: 2, 544
+  size: 560, 460
+  orig: 560, 460
   offset: 0, 0
   index: -1
 
 p5.png
-size: 702,702
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-s3
-  rotate: false
-  xy: 2, 2
-  size: 700, 700
-  orig: 700, 700
-  offset: 0, 0
-  index: -1
-
-p6.png
-size: 702,702
+size: 804,804
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 s4
   rotate: false
-  xy: 2, 2
-  size: 700, 700
-  orig: 700, 700
+  xy: 2, 404
+  size: 400, 400
+  orig: 400, 400
   offset: 0, 0
   index: -1
-
-p7.png
-size: 702,702
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 s5
-  rotate: false
-  xy: 2, 2
-  size: 700, 700
-  orig: 700, 700
-  offset: 0, 0
-  index: -1
-
-p8.png
-size: 702,702
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-s6
-  rotate: false
-  xy: 2, 2
-  size: 700, 700
-  orig: 700, 700
-  offset: 0, 0
-  index: -1
-
-p9.png
-size: 562,964
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-area
   rotate: false
   xy: 2, 2
   size: 400, 400
   orig: 400, 400
   offset: 0, 0
   index: -1
-result
+s6
   rotate: false
-  xy: 2, 404
-  size: 560, 560
-  orig: 560, 560
+  xy: 404, 404
+  size: 400, 400
+  orig: 400, 400
   offset: 0, 0
   index: -1

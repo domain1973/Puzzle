@@ -12,8 +12,8 @@ import com.ads.puzzle.fifa.controller.IController;
 import com.ads.puzzle.fifa.controller.PieceController;
 import com.ads.puzzle.fifa.listener.PieceDetector;
 import com.ads.puzzle.fifa.listener.PieceListener;
-import com.ads.puzzle.fifa.window.GameReturnWindow;
-import com.ads.puzzle.fifa.window.HelpStarWindow;
+import com.ads.puzzle.fifa.window.DefaultDialog;
+import com.ads.puzzle.fifa.window.SupsendWin;
 import com.ads.puzzle.fifa.window.ResultWindow;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -41,54 +42,66 @@ public class GameScreen extends BaseScreen {
     private PieceDetector gestureDetector;
     private boolean openResultWin;
     private boolean isPass;
-    private GameReturnWindow gameWindow;
+    private boolean openLightWin;
+    private SupsendWin gameWindow;
     private InputMultiplexer multiplexer;
     private Actor[] pieces;
 
     private boolean isUsedHelp;
     private boolean isUsingHelp = true;
     private ScheduledExecutorService executStarCount;
+    private ScheduledExecutorService executTime;
     private ParticleEffect effect;
     private int areaId;
+    private int seconds;
     private String timeStr;
+    private float x_light;
+    private boolean isShow;
+    private Image nosos;
 
-    public GameScreen(Puzzle game, int level, int gateNum) {
-        super(game);
+    public GameScreen(Puzzle puzzle, int level, int gateNum) {
+        super(puzzle);
         this.level = level;
         this.gateNum = gateNum;
         executor = Executors.newSingleThreadScheduledExecutor();
+        isShow = true;
+        nosos = new Image(Assets.nosos);
     }
 
     @Override
     public void show() {
-        super.show();
-        timeStr = "00:00";
-        areaCtrl = new AreaController(level, IController.AREA_CTRL);
-        addActor(areaCtrl);
-        pieceCtrl = new PieceController(IController.PIECE_CTRL);
-        addActor(pieceCtrl); // 添加块组到舞台
-        pieces = pieceCtrl.getChildren().begin();
-        challengeCtrl = new ChallengeController(level, gateNum, IController.CHALLENGE_CTRL);
-        addActor(challengeCtrl);
+        if (isShow) {
+            super.show();
 
-        multiplexer = new InputMultiplexer(); // 多输入接收器
-        gestureDetector = new PieceDetector(stage, new PieceListener(stage));
-        multiplexer.addProcessor(gestureDetector); // 添加手势识别
-        multiplexer.addProcessor(stage); // 添加舞台
-        Gdx.input.setInputProcessor(multiplexer); // 设置多输入接收器为接收器
+            timeStr = "00:00";
+            areaCtrl = new AreaController(level, IController.AREA_CTRL);
+            addActor(areaCtrl);
+            pieceCtrl = new PieceController(IController.PIECE_CTRL);
+            addActor(pieceCtrl); // 添加块组到舞台
+            pieces = pieceCtrl.getChildren().begin();
+            challengeCtrl = new ChallengeController(level, gateNum, IController.CHALLENGE_CTRL);
+            addActor(challengeCtrl);
 
-        createTopBar();
-        initEffect();
-        countTime();
+            multiplexer = new InputMultiplexer(); // 多输入接收器
+            gestureDetector = new PieceDetector(getStage(), new PieceListener(getStage()));
+            multiplexer.addProcessor(gestureDetector); // 添加手势识别
+            multiplexer.addProcessor(getStage()); // 添加舞台
+            Gdx.input.setInputProcessor(multiplexer); // 设置多输入接收器为接收器
+
+            createTopBar();
+            initEffect();
+            countTime();
+            Image challenge = new Image(Assets.challenge);
+            challenge.setBounds(Assets.spriteSize*3/2, Assets.spriteSize * 3 + Assets.TOPBAR_HEIGHT, Assets.spriteSize, Assets.spriteSize);
+            addActor(challenge);
+            isShow = false;
+        }
     }
 
     private void createTopBar() {
-//        ImageButton help = new ImageButton(new TextureRegionDrawable(Assets.help));
-//        help.setBounds(0, y_bar, Assets.TOPBAR_HEIGHT, Assets.TOPBAR_HEIGHT);
-//        addActor(help);
-        ImageButton unlock = new ImageButton(new TextureRegionDrawable(Assets.unlock));
-        unlock.setBounds(Gdx.graphics.getWidth() - 3 * Assets.TOPBAR_HEIGHT, y_bar, Assets.TOPBAR_HEIGHT, Assets.TOPBAR_HEIGHT);
-        unlock.addListener(new InputListener() {
+        ImageButton help = new ImageButton(new TextureRegionDrawable(Assets.help));
+        help.setBounds(Assets.WIDTH - 4 * Assets.TOPBAR_HEIGHT, getY_bar(), Assets.TOP_BTN_SIZE, Assets.TOP_BTN_SIZE);
+        help.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y,
                                      int pointer, int button) {
@@ -97,17 +110,16 @@ public class GameScreen extends BaseScreen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                addActor(new HelpStarWindow(GameScreen.this));
+                getPuzzle().setScreen(new ReadmeScreen(getPuzzle(), GameScreen.this));
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-        addActor(unlock);
-        ImageButton refresh = new ImageButton(new TextureRegionDrawable(Assets.refresh));
-        refresh.setBounds(Gdx.graphics.getWidth() - 2 * Assets.TOPBAR_HEIGHT, y_bar, Assets.TOPBAR_HEIGHT, Assets.TOPBAR_HEIGHT);
-        addActor(refresh);
-        ImageButton menu = new ImageButton(new TextureRegionDrawable(Assets.menu));
-        menu.setBounds(Gdx.graphics.getWidth() - Assets.TOPBAR_HEIGHT, y_bar, Assets.TOPBAR_HEIGHT, Assets.TOPBAR_HEIGHT);
-        menu.addListener(new InputListener() {
+        addActor(help);
+
+        ImageButton light = new ImageButton(new TextureRegionDrawable(Assets.light));
+        x_light = Assets.WIDTH - 3 * Assets.TOPBAR_HEIGHT;
+        light.setBounds(x_light, getY_bar(), Assets.TOP_BTN_SIZE, Assets.TOP_BTN_SIZE);
+        light.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y,
                                      int pointer, int button) {
@@ -116,18 +128,61 @@ public class GameScreen extends BaseScreen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                gameWindow = new GameReturnWindow(game, stage, font);
+                if (Settings.getLights() > 0) {
+                    Settings.sublight();
+                    openLightWin = true;
+                    addActor(new DefaultDialog(GameScreen.this));
+                } else {
+                    addActor(nosos);
+                    autoCloseSos();
+                }
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+        addActor(light);
+        nosos.setPosition((Assets.WIDTH - nosos.getWidth()) / 2, getY_bar() - 2*Assets.TOPBAR_HEIGHT);
+
+        ImageButton share = new ImageButton(new TextureRegionDrawable(Assets.share));
+        share.setBounds(Assets.WIDTH - 2 * Assets.TOPBAR_HEIGHT, getY_bar(), Assets.TOP_BTN_SIZE, Assets.TOP_BTN_SIZE);
+        share.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                Settings.addlight();
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+        addActor(share);
+
+        ImageButton suspend = new ImageButton(new TextureRegionDrawable(Assets.suspend));
+        suspend.setBounds(Assets.WIDTH - Assets.TOPBAR_HEIGHT, getY_bar(), Assets.TOP_BTN_SIZE, Assets.TOP_BTN_SIZE);
+        suspend.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                gameWindow = new SupsendWin(getPuzzle(), getStage(), getFont(), GameScreen.this, level);
                 addActor(gameWindow);
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-        addActor(menu);
+        addActor(suspend);
     }
 
     private void initEffect() {
         effect = new ParticleEffect();
         effect.load(Gdx.files.internal("data/test.p"), Gdx.files.internal("data/"));
     }
+
     private void changeStar() {
         executStarCount = Executors.newSingleThreadScheduledExecutor();
         executStarCount.scheduleAtFixedRate( new Runnable() {
@@ -136,33 +191,38 @@ public class GameScreen extends BaseScreen {
             }
         }, 1000, 2000, TimeUnit.MILLISECONDS);
     }
+
     @Override
     public void render(float delta) {
         super.render(delta);
-        batch.begin();
-        font.draw(batch, timeStr, 0, Assets.HEIGHT);
-        batch.end();
         handleHelp();
         handlePass();
+        getBatch().begin();
+        if (!isPass && !openLightWin) {
+            getGameFont().draw(getBatch(), Settings.getLights()+"", x_light, Assets.HEIGHT - 10);
+            getGameFont().draw(getBatch(), "次", x_light + 12, Assets.HEIGHT - 30);
+            getGameFont().draw(getBatch(), timeStr, 0, Assets.HEIGHT - 5);
+        }
+        getBatch().end();
     }
 
     private void handleHelp() {
         if (isUsedHelp) {
             if (isUsingHelp) {
                 changeStar();
+                reset();
                 isUsingHelp = false;
             }
             if (areaId < 3) {
                 int temp = areaId;//防止定时器修改值不同步
                 Area area = (Area) areaCtrl.getChildren().get(areaId);
-                batch.begin();
+                getBatch().begin();
                 effect.setPosition(area.getX() + area.getWidth() / 2, area.getY() + area.getHeight() / 2);
-                effect.draw(batch, Gdx.graphics.getDeltaTime());
-                batch.end();
-                //TODO get answer
-                String[] answers = Answer.values[gateNum].split(",");
+                effect.draw(getBatch(), Gdx.graphics.getDeltaTime());
+                getBatch().end();
+                String[] answers = Answer.VALUES[gateNum].split(",");
                 String answer = answers[temp];
-                int pieceId = answer.charAt(0) - 48;
+                int pieceId = answer.charAt(0) - 48;//Aciis转成int
                 Piece piece = (Piece)pieces[pieceId];
                 piece.setBounds(area.getX(), area.getY(), Assets.PIECE_SIZE, Assets.PIECE_SIZE);
                 piece.setOrientation(answer.charAt(1)-48);
@@ -174,6 +234,11 @@ public class GameScreen extends BaseScreen {
                 executStarCount.shutdown();
             }
         }
+    }
+
+    private void reset() {
+        areaCtrl.handler();
+        pieceCtrl.handler();
     }
 
     private void handlePass() {
@@ -201,8 +266,6 @@ public class GameScreen extends BaseScreen {
         }
     }
 
-    private int seconds;
-    private ScheduledExecutorService executTime;
     private void countTime() {
         seconds = 0;
         executTime = Executors.newSingleThreadScheduledExecutor();
@@ -228,6 +291,15 @@ public class GameScreen extends BaseScreen {
         }, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
+    private void autoCloseSos() {
+        ScheduledExecutorService executTime = Executors.newSingleThreadScheduledExecutor();
+        executTime.schedule(new Runnable() {
+            public void run() {
+                nosos.remove();
+            }
+        }, 3000, TimeUnit.MILLISECONDS);
+    }
+
     @Override
     public void pause() {
         Settings.save();
@@ -248,5 +320,9 @@ public class GameScreen extends BaseScreen {
 
     public int getSeconds() {
         return seconds;
+    }
+
+    public void setOpenLightWin(boolean openLightWin) {
+        this.openLightWin = openLightWin;
     }
 }
