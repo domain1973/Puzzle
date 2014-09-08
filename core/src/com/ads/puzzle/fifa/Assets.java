@@ -73,8 +73,8 @@ public class Assets {
     public static TextureRegion gate_2star;
     public static TextureRegion gate_3star;
     public static TextureRegion gate_lock;
-    public static TextureRegion yes;
-    public static TextureRegion no;
+    public static TextureRegion ok;
+    public static TextureRegion okdown;
     public static TextureRegion[] cubes;
 
     public static List<Sprite> levels;
@@ -114,7 +114,7 @@ public class Assets {
         TOPBAR_HEIGHT = HEIGHT / 12;
         TOP_BTN_SIZE = TOPBAR_HEIGHT;
         SMALL_PIECE_SIZE = WIDTH / 4;
-        PIECE_SIZE = Gdx.graphics.getWidth() / 2 - space * 2;
+        PIECE_SIZE = WIDTH / 2 - space * 2;
         LEVEL_IMAGE_SIZE = WIDTH ;
         LEVEL_IMAGE_OFF_SIZE = WIDTH/7;
     }
@@ -145,8 +145,8 @@ public class Assets {
         refresh = atlas.findRegion("refresh");
         gate = atlas.findRegion("gate");
         setting = atlas.findRegion("setting");
-        yes = atlas.findRegion("ok");
-        no = atlas.findRegion("no");
+        ok = atlas.findRegion("ok");
+        okdown = atlas.findRegion("okdown");
         music = atlas.findRegion("muisc");
         nomusic = atlas.findRegion("nomuisc");
         sound = atlas.findRegion("sound");
@@ -192,8 +192,8 @@ public class Assets {
                 String spriteName = String.valueOf(i * 100 + m);
                 Sprite s1 = atlas.createSprite(spriteName);
                 if (s1 == null) break;
+                spriteSize = (int)WIDTH/7;
                 sprites.add(s1);
-                spriteSize = s1.getHeight();
                 m++;
             }
             levelSpriteMap.put(i - 1, sprites);

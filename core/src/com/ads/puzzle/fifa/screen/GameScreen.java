@@ -13,6 +13,7 @@ import com.ads.puzzle.fifa.controller.PieceController;
 import com.ads.puzzle.fifa.listener.PieceDetector;
 import com.ads.puzzle.fifa.listener.PieceListener;
 import com.ads.puzzle.fifa.window.DefaultDialog;
+import com.ads.puzzle.fifa.window.SosDialog;
 import com.ads.puzzle.fifa.window.SupsendWin;
 import com.ads.puzzle.fifa.window.ResultWindow;
 import com.badlogic.gdx.Gdx;
@@ -131,7 +132,7 @@ public class GameScreen extends BaseScreen {
                 if (Settings.getLights() > 0) {
                     Settings.sublight();
                     openLightWin = true;
-                    addActor(new DefaultDialog(GameScreen.this));
+                    addActor(new SosDialog(GameScreen.this, "你确定要使用求救吗?"));
                 } else {
                     addActor(nosos);
                     autoCloseSos();
@@ -199,6 +200,7 @@ public class GameScreen extends BaseScreen {
         handlePass();
         getBatch().begin();
         if (!isPass && !openLightWin) {
+            getGameFont().setScale(Assets.TOPBAR_HEIGHT/32);
             getGameFont().draw(getBatch(), Settings.getLights()+"", x_light, Assets.HEIGHT - 10);
             getGameFont().draw(getBatch(), "次", x_light + 12, Assets.HEIGHT - 30);
             getGameFont().draw(getBatch(), timeStr, 0, Assets.HEIGHT - 5);

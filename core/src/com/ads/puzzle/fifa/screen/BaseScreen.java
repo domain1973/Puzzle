@@ -20,6 +20,7 @@ public class BaseScreen extends ScreenAdapter {
     private Puzzle puzzle;
     private BitmapFont font;
     private BitmapFont gameFont;
+    private BitmapFont dlgFont;
     private float y_bar;
 
     public BaseScreen(Puzzle game) {
@@ -31,12 +32,16 @@ public class BaseScreen extends ScreenAdapter {
                 Gdx.files.internal("other.png"), false);
         gameFont = new BitmapFont(Gdx.files.internal("puzzle.fnt"),
                 Gdx.files.internal("puzzle.png"), false);
+        dlgFont = new BitmapFont(Gdx.files.internal("dlg.fnt"),
+                Gdx.files.internal("dlg.png"), false);
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage); // 设置输入接收器
-        stage.addActor(new Image(Assets.gameBg));
+        Image bg = new Image(Assets.gameBg);
+        bg.setBounds(0, 0, Assets.WIDTH, Assets.HEIGHT);
+        stage.addActor(bg);
     }
 
     protected void addActor(Actor actor) {
@@ -61,6 +66,10 @@ public class BaseScreen extends ScreenAdapter {
 
     public BitmapFont getGameFont() {
         return gameFont;
+    }
+
+    public BitmapFont getDlgFont() {
+        return dlgFont;
     }
 
     public Stage getStage() {
