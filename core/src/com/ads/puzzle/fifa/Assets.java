@@ -42,8 +42,6 @@ public class Assets {
     public static TextureRegion gatestar;
     public static TextureRegion gatestar_null;
     public static TextureRegion readme;
-    public static TextureRegion nosos;
-    public static TextureRegion challenge;
     public static TextureRegion aboutInfo;
 
     public static TextureRegion help;
@@ -73,8 +71,6 @@ public class Assets {
     public static TextureRegion gate_2star;
     public static TextureRegion gate_3star;
     public static TextureRegion gate_lock;
-    public static TextureRegion ok;
-    public static TextureRegion okdown;
     public static TextureRegion[] cubes;
 
     public static List<Sprite> levels;
@@ -95,6 +91,7 @@ public class Assets {
     private static int levelNum = 2;
 
     public static void load() {
+        initConstants();
         TextureAtlas atlas = new TextureAtlas("p.atlas");
         loadBmps(atlas);
         createLevels(atlas);
@@ -105,7 +102,6 @@ public class Assets {
         }catch (Exception e) {
             e.printStackTrace();
         }
-        initConstants();
     }
 
     private static void initConstants() {
@@ -132,8 +128,6 @@ public class Assets {
         resultBg = atlas.findRegion("result");
         areaBg = atlas.findRegion("area");
         readme = atlas.findRegion("readme_small");
-        nosos = atlas.findRegion("nosos");
-        challenge = atlas.findRegion("challenge");
         aboutInfo = atlas.findRegion("about_small");
 
         suspend = atlas.findRegion("suspend");
@@ -145,8 +139,6 @@ public class Assets {
         refresh = atlas.findRegion("refresh");
         gate = atlas.findRegion("gate");
         setting = atlas.findRegion("setting");
-        ok = atlas.findRegion("ok");
-        okdown = atlas.findRegion("okdown");
         music = atlas.findRegion("muisc");
         nomusic = atlas.findRegion("nomuisc");
         sound = atlas.findRegion("sound");

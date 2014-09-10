@@ -68,7 +68,7 @@ public class Area extends Image {
         y1 = y2 - spriteArea;
         y0 = y1 - spriteArea;
         sprites = Assets.levelSpriteMap.get(level);
-        spriteSize = sprites.get(0).getWidth();
+        spriteSize = Assets.PIECE_SIZE/3;
         float t_off = Gdx.graphics.getHeight() - Assets.TOPBAR_HEIGHT - line / 2;
         if (id == 0) {
             x_bg = x_off;

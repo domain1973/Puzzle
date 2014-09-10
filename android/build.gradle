@@ -99,4 +99,7 @@ idea {
 }
 dependencies {
     compile files('F:/ADWisdomHouse/Game/Puzzle/libs/YoumiSdk_v4.09_2014-06-16.jar')
+    compile files('F:/ADWisdomHouse/Game/Puzzle/libs/umilocalpaysdk-V221.jar')
+    compile files('F:/ADWisdomHouse/Game/Puzzle/libs/UPPayAssistEx.jar')
+    compile files('F:/ADWisdomHouse/Game/Puzzle/libs/UPPayPluginEx.jar')
 }

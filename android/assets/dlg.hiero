@@ -13,7 +13,7 @@ pad.advance.y=0
 glyph.native.rendering=false
 glyph.page.width=512
 glyph.page.height=512
-glyph.text=你确定使用求救吗?退出游戏取消温馨提示\n
+glyph.text=你确定使用求救吗?退出游戏取消温馨提示次数不够,点击分享可以获取求救机会哦!\n
 
 effect.class=com.badlogic.gdx.tools.hiero.unicodefont.effects.ColorEffect
 effect.Color=000000

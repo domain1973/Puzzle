@@ -7,6 +7,6 @@ import com.ads.puzzle.fifa.Puzzle;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new Puzzle(), config);
+		new LwjglApplication(new Puzzle(getApplicationContext()), config);
 	}
 }

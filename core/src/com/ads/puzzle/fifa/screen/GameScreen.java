@@ -18,12 +18,14 @@ import com.ads.puzzle.fifa.window.SupsendWin;
 import com.ads.puzzle.fifa.window.ResultWindow;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.concurrent.Executors;
@@ -44,6 +46,7 @@ public class GameScreen extends BaseScreen {
     private boolean openResultWin;
     private boolean isPass;
     private boolean openLightWin;
+    private boolean isSuspend;
     private SupsendWin gameWindow;
     private InputMultiplexer multiplexer;
     private Actor[] pieces;
@@ -58,7 +61,6 @@ public class GameScreen extends BaseScreen {
     private String timeStr;
     private float x_light;
     private boolean isShow;
-    private Image nosos;
 
     public GameScreen(Puzzle puzzle, int level, int gateNum) {
         super(puzzle);
@@ -66,7 +68,6 @@ public class GameScreen extends BaseScreen {
         this.gateNum = gateNum;
         executor = Executors.newSingleThreadScheduledExecutor();
         isShow = true;
-        nosos = new Image(Assets.nosos);
     }
 
     @Override
@@ -90,11 +91,9 @@ public class GameScreen extends BaseScreen {
             Gdx.input.setInputProcessor(multiplexer); // 设置多输入接收器为接收器
 
             createTopBar();
+            addLabels();
             initEffect();
-            countTime();
-            Image challenge = new Image(Assets.challenge);
-            challenge.setBounds(Assets.spriteSize*3/2, Assets.spriteSize * 3 + Assets.TOPBAR_HEIGHT, Assets.spriteSize, Assets.spriteSize);
-            addActor(challenge);
+            createTimer();
             isShow = false;
         }
     }
@@ -129,19 +128,17 @@ public class GameScreen extends BaseScreen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                openLightWin = true;
                 if (Settings.getLights() > 0) {
                     Settings.sublight();
-                    openLightWin = true;
-                    addActor(new SosDialog(GameScreen.this, "你确定要使用求救吗?"));
+                    addActor(new SosDialog(GameScreen.this, "你确定要使用求救吗?", true));
                 } else {
-                    addActor(nosos);
-                    autoCloseSos();
+                    addActor(new SosDialog(GameScreen.this, "次数不够,点击分享可以获取求救机会哦!", false));
                 }
                 super.touchUp(event, x, y, pointer, button);
             }
         });
         addActor(light);
-        nosos.setPosition((Assets.WIDTH - nosos.getWidth()) / 2, getY_bar() - 2*Assets.TOPBAR_HEIGHT);
 
         ImageButton share = new ImageButton(new TextureRegionDrawable(Assets.share));
         share.setBounds(Assets.WIDTH - 2 * Assets.TOPBAR_HEIGHT, getY_bar(), Assets.TOP_BTN_SIZE, Assets.TOP_BTN_SIZE);
@@ -171,12 +168,29 @@ public class GameScreen extends BaseScreen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                suspendTimer();
                 gameWindow = new SupsendWin(getPuzzle(), getStage(), getFont(), GameScreen.this, level);
                 addActor(gameWindow);
                 super.touchUp(event, x, y, pointer, button);
             }
         });
         addActor(suspend);
+    }
+
+    private void addLabels() {
+        float fontSize = 36;//default
+        Label.LabelStyle labelStyle = new Label.LabelStyle(getGameFont(), Color.YELLOW); // 创建一个Label样式，使用默认黑色字体
+        Label labTime = new Label("", labelStyle);
+        labTime.setName("timeLabel"); // 设置标签名称为time
+        labTime.setPosition(0, Assets.HEIGHT - 27/2);
+        addActor(labTime);
+        Label labCount = new Label("", labelStyle);
+        labCount.setName("countLabel"); //
+        labCount.setPosition(x_light, Assets.HEIGHT - 27/2);
+        addActor(labCount);
+        Label labC = new Label("挑战", labelStyle);
+        labC.setPosition(Assets.spriteSize*3/2,  Assets.PIECE_SIZE + Assets.TOPBAR_HEIGHT);
+        addActor(labC);
     }
 
     private void initEffect() {
@@ -198,14 +212,11 @@ public class GameScreen extends BaseScreen {
         super.render(delta);
         handleHelp();
         handlePass();
-        getBatch().begin();
-        if (!isPass && !openLightWin) {
-            getGameFont().setScale(Assets.TOPBAR_HEIGHT/32);
-            getGameFont().draw(getBatch(), Settings.getLights()+"", x_light, Assets.HEIGHT - 10);
-            getGameFont().draw(getBatch(), "次", x_light + 12, Assets.HEIGHT - 30);
-            getGameFont().draw(getBatch(), timeStr, 0, Assets.HEIGHT - 5);
-        }
-        getBatch().end();
+
+        Label labTime = (Label) getStage().getRoot().findActor("timeLabel"); // 获取名为fpsLabel的标签
+        labTime.setText(timeStr);
+        Label labCount = (Label) getStage().getRoot().findActor("countLabel"); // 获取名为fpsLabel的标签
+        labCount.setText(Settings.getLights() + "次");
     }
 
     private void handleHelp() {
@@ -239,6 +250,7 @@ public class GameScreen extends BaseScreen {
     }
 
     private void reset() {
+        areaId = 0;
         areaCtrl.handler();
         pieceCtrl.handler();
     }
@@ -268,13 +280,24 @@ public class GameScreen extends BaseScreen {
         }
     }
 
-    private void countTime() {
+    private void suspendTimer() {
+        isSuspend = true;
+    }
+
+    public void resumeTimer() {
+        isSuspend = false;
+    }
+
+    private void createTimer() {
+        isSuspend = false;
         seconds = 0;
         executTime = Executors.newSingleThreadScheduledExecutor();
         executTime.scheduleAtFixedRate(new Runnable() {
             public void run() {
-                seconds++; //
-                buildTimeStr();
+                if (!isSuspend) {
+                    seconds++; //
+                    buildTimeStr();
+                }
             }
 
             private void buildTimeStr() {
@@ -293,15 +316,6 @@ public class GameScreen extends BaseScreen {
         }, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
-    private void autoCloseSos() {
-        ScheduledExecutorService executTime = Executors.newSingleThreadScheduledExecutor();
-        executTime.schedule(new Runnable() {
-            public void run() {
-                nosos.remove();
-            }
-        }, 3000, TimeUnit.MILLISECONDS);
-    }
-
     @Override
     public void pause() {
         Settings.save();
@@ -313,10 +327,14 @@ public class GameScreen extends BaseScreen {
 
     public void return2init() {
         isPass = false;
-        countTime();
+        if (!executTime.isShutdown()) {
+            executTime.shutdown();
+        }
+        createTimer();
     }
 
     public void useHelp() {
+        isUsingHelp = true;
         isUsedHelp = true;
     }
 

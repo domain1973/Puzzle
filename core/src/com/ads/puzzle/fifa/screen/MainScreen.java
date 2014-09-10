@@ -3,15 +3,13 @@ package com.ads.puzzle.fifa.screen;
 import com.ads.puzzle.fifa.Assets;
 import com.ads.puzzle.fifa.Puzzle;
 import com.ads.puzzle.fifa.Settings;
-import com.ads.puzzle.fifa.window.DefaultDialog;
 import com.ads.puzzle.fifa.window.GameExitDialog;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
 
 /**
  * Created by Ads on 2014/6/22.
@@ -100,6 +98,20 @@ public class MainScreen extends BaseScreen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 addActor(new GameExitDialog(MainScreen.this,
                         "你确定要退出吗?"));
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+        aboutBtn.addListener(new InputListener() {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                game.getPayEvent().handler();
                 super.touchUp(event, x, y, pointer, button);
             }
         });

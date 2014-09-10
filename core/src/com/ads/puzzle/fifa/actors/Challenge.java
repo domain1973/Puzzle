@@ -26,7 +26,7 @@ public class Challenge extends Group {
             Image image = new Image(sprites.get(bmpIds[i]));
             float y = y_off + (- i / 3 + 2) * space;
             float x = x_off + i % 3 * space;
-            image.setPosition(x, y);
+            image.setBounds(x, y, Assets.PIECE_SIZE/3, Assets.PIECE_SIZE/3);
             addActor(image);
         }
         isDraw = true;

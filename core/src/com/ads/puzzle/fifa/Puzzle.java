@@ -6,6 +6,11 @@ import com.badlogic.gdx.Game;
 public class Puzzle extends Game {
     private int passGateNum;
     private MainScreen mainScreen;
+    private PayEvent payEvent;
+
+    public Puzzle(PayEvent pe) {
+        payEvent = pe;
+    }
 
     @Override
     public void create() {
@@ -25,5 +30,9 @@ public class Puzzle extends Game {
 
     public void setPassGateNum(int passGateNum) {
         this.passGateNum = passGateNum;
+    }
+
+    public PayEvent getPayEvent() {
+        return payEvent;
     }
 }

@@ -1,5 +1,5 @@
 font.name=Œ¢»Ì—≈∫⁄
-font.size=26
+font.size=36
 font.bold=true
 font.italic=false
 
@@ -13,7 +13,7 @@ pad.advance.y=0
 glyph.native.rendering=false
 glyph.page.width=512
 glyph.page.height=512
-glyph.text=0123456789¥Œ:
+glyph.text=0123456789¥Œ:ÃÙ’Ω
 
 effect.class=com.badlogic.gdx.tools.hiero.unicodefont.effects.ColorEffect
 effect.Color=ffff00

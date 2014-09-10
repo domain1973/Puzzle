@@ -14,10 +14,20 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
  */
 public class SosDialog extends  DefaultDialog {
     private GameScreen gameScreen;
+    private boolean isZero;
 
-    public SosDialog(GameScreen gs, String mess) {
+    public SosDialog(GameScreen gs, String mess, boolean zero) {
         super(gs, mess);
-        this.gameScreen = gs;
+        gameScreen = gs;
+        isZero = zero;
+    }
+
+    @Override
+    public void create() {
+        super.create();
+        if (isZero) {
+            btnCancel.remove();
+        }
     }
 
     @Override
@@ -48,10 +58,12 @@ public class SosDialog extends  DefaultDialog {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 layerBg.remove();
                 SosDialog.this.remove();
-                gameScreen.setOpenLightWin(false);
-                gameScreen.useHelp();
-                Group group = gameScreen.getStage().getRoot();
-                ((PieceController) group.findActor(IController.PIECE_CTRL)).handler();
+                if (!isZero) {
+                    gameScreen.setOpenLightWin(false);
+                    gameScreen.useHelp();
+                    Group group = gameScreen.getStage().getRoot();
+                    ((PieceController) group.findActor(IController.PIECE_CTRL)).handler();
+                }
                 super.touchUp(event, x, y, pointer, button);
             }
         });

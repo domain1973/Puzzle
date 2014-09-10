@@ -29,13 +29,13 @@ public class SupsendWin extends BaseWindow {
     private Stage stage;
     private int level;
 
-    public SupsendWin(Puzzle game, Stage stage, BitmapFont font, GameScreen gameScreen, int level) {
+    public SupsendWin(Puzzle g, Stage stage, BitmapFont font, GameScreen gs, int lv) {
         super("暂停",  new Window.WindowStyle(font, Color.WHITE, new TextureRegionDrawable(
                 Assets.gameBg)));
-        this.game = game;
+        this.game = g;
         this.stage = stage;
-        this.gameScreen = gameScreen;
-        this.level = level;
+        gameScreen = gs;
+        level = lv;
         create();
     }
 
@@ -53,8 +53,8 @@ public class SupsendWin extends BaseWindow {
         gate.setBounds(v, ym-btnSize/2, btnSize, btnSize);
         ImageButton share = new ImageButton(new TextureRegionDrawable(Assets.share), new TextureRegionDrawable(Assets.share));
         share.setBounds(v+btnSize, ym-btnSize/2, btnSize, btnSize);
-        ImageButton next = new ImageButton(new TextureRegionDrawable(Assets.continueTr), new TextureRegionDrawable(Assets.continueTr));
-        next.setBounds(v + btnSize*2, ym-btnSize/2, btnSize, btnSize);
+        ImageButton continues = new ImageButton(new TextureRegionDrawable(Assets.continueTr), new TextureRegionDrawable(Assets.continueTr));
+        continues.setBounds(v + btnSize * 2, ym - btnSize / 2, btnSize, btnSize);
 
         ImageButton music = new ImageButton(new TextureRegionDrawable(Assets.music), new TextureRegionDrawable(Assets.music));
         music.setBounds(v1, ym * 2, btnSize, btnSize);
@@ -105,13 +105,26 @@ public class SupsendWin extends BaseWindow {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
+        continues.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
+                return true;
+            }
 
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                gameScreen.resumeTimer();
+                game.setScreen(gameScreen);
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
         addActor(music);
         addActor(sound);
         addActor(about);
         addActor(help);
         addActor(gate);
         addActor(share);
-        addActor(next);
+        addActor(continues);
     }
 }
