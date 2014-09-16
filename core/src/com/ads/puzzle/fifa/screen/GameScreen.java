@@ -12,18 +12,16 @@ import com.ads.puzzle.fifa.controller.IController;
 import com.ads.puzzle.fifa.controller.PieceController;
 import com.ads.puzzle.fifa.listener.PieceDetector;
 import com.ads.puzzle.fifa.listener.PieceListener;
-import com.ads.puzzle.fifa.window.DefaultDialog;
-import com.ads.puzzle.fifa.window.SosDialog;
-import com.ads.puzzle.fifa.window.SupsendWin;
 import com.ads.puzzle.fifa.window.ResultWindow;
+import com.ads.puzzle.fifa.window.SupsendWin;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -41,40 +39,44 @@ public class GameScreen extends BaseScreen {
     private AreaController areaCtrl;
     private PieceController pieceCtrl;
     private ChallengeController challengeCtrl;
-    private ScheduledExecutorService executor;
+
     private PieceDetector gestureDetector;
     private boolean openResultWin;
     private boolean isPass;
-    private boolean openLightWin;
     private boolean isSuspend;
     private SupsendWin gameWindow;
     private InputMultiplexer multiplexer;
     private Actor[] pieces;
-
     private boolean isUsedHelp;
-    private boolean isUsingHelp = true;
-    private ScheduledExecutorService executStarCount;
-    private ScheduledExecutorService executTime;
-    private ParticleEffect effect;
+    private boolean isUsingHelp;
+
     private int areaId;
     private int seconds;
     private String timeStr;
     private float x_light;
     private boolean isShow;
+    private int starNum;
+    private Label labTime;
+    private Label labCount;
 
-    public GameScreen(Puzzle puzzle, int level, int gateNum) {
+    private ScheduledExecutorService executorGateEnd;
+    private ScheduledExecutorService executStarCount;
+    private ScheduledExecutorService executTime;
+    private ParticleEffect effect;
+
+    public GameScreen(Puzzle puzzle, int lv, int num) {
         super(puzzle);
-        this.level = level;
-        this.gateNum = gateNum;
-        executor = Executors.newSingleThreadScheduledExecutor();
+        level = lv;
+        gateNum = num;
+        executorGateEnd = Executors.newSingleThreadScheduledExecutor();
         isShow = true;
+        isUsingHelp = true;
     }
 
     @Override
     public void show() {
         if (isShow) {
             super.show();
-
             timeStr = "00:00";
             areaCtrl = new AreaController(level, IController.AREA_CTRL);
             addActor(areaCtrl);
@@ -99,6 +101,7 @@ public class GameScreen extends BaseScreen {
     }
 
     private void createTopBar() {
+        super.createBtns();
         ImageButton help = new ImageButton(new TextureRegionDrawable(Assets.help));
         help.setBounds(Assets.WIDTH - 4 * Assets.TOPBAR_HEIGHT, getY_bar(), Assets.TOP_BTN_SIZE, Assets.TOP_BTN_SIZE);
         help.addListener(new InputListener() {
@@ -116,10 +119,10 @@ public class GameScreen extends BaseScreen {
         });
         addActor(help);
 
-        ImageButton light = new ImageButton(new TextureRegionDrawable(Assets.light));
-        x_light = Assets.WIDTH - 3 * Assets.TOPBAR_HEIGHT;
-        light.setBounds(x_light, getY_bar(), Assets.TOP_BTN_SIZE, Assets.TOP_BTN_SIZE);
-        light.addListener(new InputListener() {
+        ImageButton sos = new ImageButton(new TextureRegionDrawable(Assets.light));
+        x_light = Assets.WIDTH - 3 * Assets.TOPBAR_HEIGHT - 5;
+        sos.setBounds(x_light, getY_bar(), Assets.TOP_BTN_SIZE, Assets.TOP_BTN_SIZE);
+        sos.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y,
                                      int pointer, int button) {
@@ -128,17 +131,15 @@ public class GameScreen extends BaseScreen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                openLightWin = true;
-                if (Settings.getLights() > 0) {
-                    Settings.sublight();
-                    addActor(new SosDialog(GameScreen.this, "你确定要使用求救吗?", true));
+                if (Settings.helpNum > 0) {
+                    getPuzzle().getPEvent().sos(GameScreen.this);
                 } else {
-                    addActor(new SosDialog(GameScreen.this, "次数不够,点击分享可以获取求救机会哦!", false));
+                    getPuzzle().getPEvent().invalidateSos();
                 }
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-        addActor(light);
+        addActor(sos);
 
         ImageButton share = new ImageButton(new TextureRegionDrawable(Assets.share));
         share.setBounds(Assets.WIDTH - 2 * Assets.TOPBAR_HEIGHT, getY_bar(), Assets.TOP_BTN_SIZE, Assets.TOP_BTN_SIZE);
@@ -151,7 +152,7 @@ public class GameScreen extends BaseScreen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                Settings.addlight();
+                Settings.helpNum++;
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -169,27 +170,36 @@ public class GameScreen extends BaseScreen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 suspendTimer();
-                gameWindow = new SupsendWin(getPuzzle(), getStage(), getFont(), GameScreen.this, level);
+                gameWindow = new SupsendWin(getPuzzle(), getGameFont(), GameScreen.this, level);
                 addActor(gameWindow);
                 super.touchUp(event, x, y, pointer, button);
             }
         });
         addActor(suspend);
+
+        returnBtn.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
+                getPuzzle().setScreen(new GateScreen(getPuzzle(), level));
+                return true;
+            }
+        });
     }
 
     private void addLabels() {
         float fontSize = 36;//default
-        Label.LabelStyle labelStyle = new Label.LabelStyle(getGameFont(), Color.YELLOW); // 创建一个Label样式，使用默认黑色字体
-        Label labTime = new Label("", labelStyle);
-        labTime.setName("timeLabel"); // 设置标签名称为time
-        labTime.setPosition(0, Assets.HEIGHT - 27/2);
+        BitmapFont gameFont = getGameFont();
+        int scale = (int)(Assets.TOPBAR_HEIGHT / fontSize);
+        gameFont.setScale(scale);
+        labTime = new Label("", new Label.LabelStyle(gameFont, Color.YELLOW));
+        labTime.setPosition((Assets.WIDTH  - Assets.PIECE_SIZE/2)/2, Assets.HEIGHT - Assets.TOPBAR_HEIGHT - Assets.PIECE_SIZE);
         addActor(labTime);
-        Label labCount = new Label("", labelStyle);
-        labCount.setName("countLabel"); //
-        labCount.setPosition(x_light, Assets.HEIGHT - 27/2);
+        labCount = new Label("", new Label.LabelStyle(gameFont, Color.RED));
+        labCount.setPosition(x_light, Assets.HEIGHT - Assets.TOPBAR_HEIGHT/2);
         addActor(labCount);
-        Label labC = new Label("挑战", labelStyle);
-        labC.setPosition(Assets.spriteSize*3/2,  Assets.PIECE_SIZE + Assets.TOPBAR_HEIGHT);
+        Label labC = new Label("挑战", new Label.LabelStyle(gameFont, Color.WHITE));
+        labC.setPosition(Assets.SPRITESIZE *3/2,  Assets.PIECE_SIZE + Assets.TOPBAR_HEIGHT);
         addActor(labC);
     }
 
@@ -212,11 +222,8 @@ public class GameScreen extends BaseScreen {
         super.render(delta);
         handleHelp();
         handlePass();
-
-        Label labTime = (Label) getStage().getRoot().findActor("timeLabel"); // 获取名为fpsLabel的标签
         labTime.setText(timeStr);
-        Label labCount = (Label) getStage().getRoot().findActor("countLabel"); // 获取名为fpsLabel的标签
-        labCount.setText(Settings.getLights() + "次");
+        labCount.setText(Settings.helpNum +"");
     }
 
     private void handleHelp() {
@@ -245,6 +252,8 @@ public class GameScreen extends BaseScreen {
                 isUsedHelp = false;
                 areaId = -1;
                 executStarCount.shutdown();
+                multiplexer.addProcessor(gestureDetector); // 添加手势识别
+                multiplexer.addProcessor(getStage());
             }
         }
     }
@@ -261,9 +270,24 @@ public class GameScreen extends BaseScreen {
             handleGate();
         }
         if (openResultWin) {
-            addActor(new ResultWindow(this));
+            computerStarNum();
+            addActor(new ResultWindow(this, starNum));
             openResultWin = false;
         }
+    }
+
+    private void computerStarNum() {
+        int minute = getSeconds()/60;
+        if (minute <= Answer.GRADE_1) {
+            starNum = 3;
+        } else if (minute > Answer.GRADE_1 && minute <= Answer.GRADE_2) {
+            starNum = 2;
+        } else if (minute > Answer.GRADE_3 && minute <= Answer.GRADE_4){
+            starNum = 1;
+        } else {
+            starNum = 0;
+        }
+        Answer.gateStars.set(challengeCtrl.getGateNum(), starNum);
     }
 
     private void handleGate() {
@@ -275,7 +299,7 @@ public class GameScreen extends BaseScreen {
                     openResultWin = true; //关卡结束
                 }
             };
-            executor.schedule(runner, 1500, TimeUnit.MILLISECONDS);
+            executorGateEnd.schedule(runner, 1500, TimeUnit.MILLISECONDS);
             isPass = true;
         }
     }
@@ -318,7 +342,6 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void pause() {
-        Settings.save();
     }
 
     public int getLevel() {
@@ -333,16 +356,20 @@ public class GameScreen extends BaseScreen {
         createTimer();
     }
 
-    public void useHelp() {
-        isUsingHelp = true;
-        isUsedHelp = true;
+    public void refreshGame() {
+        return2init();
+        pieceCtrl.handler();
     }
 
     public int getSeconds() {
         return seconds;
     }
 
-    public void setOpenLightWin(boolean openLightWin) {
-        this.openLightWin = openLightWin;
+    public void useSos() {
+        multiplexer.removeProcessor(gestureDetector);
+        multiplexer.removeProcessor(getStage());
+        isUsingHelp = true;
+        isUsedHelp = true;
+        pieceCtrl.handler();
     }
 }

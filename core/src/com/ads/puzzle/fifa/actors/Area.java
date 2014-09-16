@@ -53,8 +53,8 @@ public class Area extends Image {
         float x = size * (id % 2);
         float y = Gdx.graphics.getHeight() - Assets.TOPBAR_HEIGHT - size * (id / 2);
         setBounds(x, y, size, size);
-        float yoff = (spriteArea + Assets.spriteSize) / 2;
-        float xoff = (spriteArea - Assets.spriteSize) / 2;
+        float yoff = (spriteArea + Assets.SPRITESIZE) / 2;
+        float xoff = (spriteArea - Assets.SPRITESIZE) / 2;
         x0 = x_off + xoff;
         x1 = x0 + spriteArea;
         x2 = x1 + spriteArea;

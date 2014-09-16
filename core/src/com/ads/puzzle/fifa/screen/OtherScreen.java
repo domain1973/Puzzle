@@ -3,27 +3,24 @@ package com.ads.puzzle.fifa.screen;
 import com.ads.puzzle.fifa.Answer;
 import com.ads.puzzle.fifa.Assets;
 import com.ads.puzzle.fifa.Puzzle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 /**
  * Created by Administrator on 2014/7/27.
  */
 public class OtherScreen extends BaseScreen {
-
-    protected ImageButton returnBtn;
     private ImageButton shareBtn;
     private Image star;
-    protected float x_num;
-    protected float y_num;
+    private Label starLabel;
 
     public OtherScreen(Puzzle game) {
         super(game);
-        x_num = Assets.WIDTH - 3 * Assets.TOPBAR_HEIGHT;
-        y_num = Assets.HEIGHT - 5;
     }
 
     @Override
@@ -33,8 +30,7 @@ public class OtherScreen extends BaseScreen {
     }
 
     protected void createBtns() {
-        returnBtn = new ImageButton(new TextureRegionDrawable(Assets.returnTr));
-        returnBtn.setBounds(0, getY_bar(),Assets.TOPBAR_HEIGHT, Assets.TOPBAR_HEIGHT);
+        super.createBtns();
         shareBtn = new ImageButton(new TextureRegionDrawable(Assets.share));
         shareBtn.setBounds(Assets.TOPBAR_HEIGHT, getY_bar(), Assets.TOPBAR_HEIGHT, Assets.TOPBAR_HEIGHT);
         shareBtn.addListener(new InputListener() {
@@ -51,10 +47,16 @@ public class OtherScreen extends BaseScreen {
         });
         star = new Image(new TextureRegionDrawable(Assets.star));
         star.setBounds(Assets.WIDTH - Assets.TOPBAR_HEIGHT, getY_bar(), Assets.TOPBAR_HEIGHT, Assets.TOPBAR_HEIGHT);
-
+        Label.LabelStyle labelStyle = new Label.LabelStyle(getGameFont(), Color.WHITE); // 创建一个Label样式，使用默认白色字体
+        starLabel = new Label("", labelStyle);
+        starLabel.setBounds(Assets.WIDTH - 3*Assets.TOPBAR_HEIGHT, getY_bar(), Assets.TOPBAR_HEIGHT, Assets.TOPBAR_HEIGHT);
+        addActor(starLabel);
         addActor(shareBtn);
         addActor(star);
-        addActor(returnBtn);
+    }
+
+    protected Label getStarLabel() {
+        return starLabel;
     }
 
     protected int getStarNum() {

@@ -41,13 +41,6 @@ public class AboutScreen extends OtherScreen {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-    }
-
-    @Override
-    public void render(float delta) {
-        super.render(delta);
-        getBatch().begin();
-        getFont().draw(getBatch(), "总计: " + getStarNum(), x_num, y_num);
-        getBatch().end();
+        getStarLabel().setText("总计:" + getStarNum());
     }
 }

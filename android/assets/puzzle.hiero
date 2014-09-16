@@ -1,4 +1,4 @@
-font.name=微软雅黑
+font.name=楷体
 font.size=36
 font.bold=true
 font.italic=false
@@ -13,8 +13,8 @@ pad.advance.y=0
 glyph.native.rendering=false
 glyph.page.width=512
 glyph.page.height=512
-glyph.text=0123456789次:挑战
+glyph.text=0123456789+:/挑战总计是天才!真棒恭喜您过关了算
 
 effect.class=com.badlogic.gdx.tools.hiero.unicodefont.effects.ColorEffect
-effect.Color=ffff00
+effect.Color=ffffff
 

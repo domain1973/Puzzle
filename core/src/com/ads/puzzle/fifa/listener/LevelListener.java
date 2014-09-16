@@ -1,16 +1,16 @@
 package com.ads.puzzle.fifa.listener;
 
+import com.ads.puzzle.fifa.Answer;
 import com.ads.puzzle.fifa.Assets;
 import com.ads.puzzle.fifa.Puzzle;
+import com.ads.puzzle.fifa.Settings;
 import com.ads.puzzle.fifa.screen.GateScreen;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 
 /**
@@ -18,16 +18,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
  */
 public class LevelListener extends GestureDetector.GestureAdapter {
     private Stage stage;
-    private Puzzle game;
+    private Puzzle puzzle;
     private Vector3 touchPoint;
     //用来标记第一大关图片的位置，可以为负，无法显示的部分就不会被画出
     private float position;
     private float prex;
     private float currentx;
 
-    public LevelListener(Stage stage, Puzzle game) {
-        this.stage = stage;
-        this.game = game;
+    public LevelListener(Stage s, Puzzle game) {
+        stage = s;
+        puzzle = game;
         touchPoint = new Vector3();
     }
 
@@ -49,10 +49,13 @@ public class LevelListener extends GestureDetector.GestureAdapter {
     public boolean tap(float x, float y, int count, int button) {
         stage.getCamera().unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0)); // 坐标转化
         int level = (int)Math.abs(position/480);
-        float v = Assets.WIDTH - 2 * Assets.LEVEL_IMAGE_OFF_SIZE;
-        Rectangle bounds = new Rectangle(Assets.LEVEL_IMAGE_OFF_SIZE, (Assets.HEIGHT - Assets.WIDTH) / 2+Assets.LEVEL_IMAGE_OFF_SIZE, v, v);
-        if (bounds.contains(touchPoint.x, touchPoint.y)) {
-            game.setScreen(new GateScreen(game, level));
+        int tLevel = Settings.passGateNum / Answer.GATE_MAX;
+        if (level <= tLevel) {
+            float v = Assets.WIDTH - 2 * Assets.LEVEL_IMAGE_OFF_SIZE;
+            Rectangle bounds = new Rectangle(Assets.LEVEL_IMAGE_OFF_SIZE, (Assets.HEIGHT - Assets.WIDTH) / 2 + Assets.LEVEL_IMAGE_OFF_SIZE, v, v);
+            if (bounds.contains(touchPoint.x, touchPoint.y)) {
+                puzzle.setScreen(new GateScreen(puzzle, level));
+            }
         }
         return false;
     }

@@ -15,6 +15,6 @@ public class BaseWindow extends Window {
     public BaseWindow(String title, WindowStyle style) {
         super(title, style);
         layerBg = new Image(Assets.layerBg);
-        layerBg.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        layerBg.setBounds(0, 0, Assets.WIDTH, Assets.HEIGHT);
     }
 }

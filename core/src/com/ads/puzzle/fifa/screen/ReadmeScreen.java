@@ -11,19 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
  */
 public class ReadmeScreen extends OtherScreen {
     private Image readmeImage;
-    private ReadmeScreen readmeScreen;
     private MainScreen mainScreen;
     private GameScreen gameScreen;
 
     private ReadmeScreen(Puzzle game) {
         super(game);
         readmeImage = new Image(Assets.readme);
-        readmeImage.setPosition(0, (Assets.HEIGHT - readmeImage.getHeight())/2);
-    }
-
-    public ReadmeScreen(Puzzle game, ReadmeScreen rs) {
-        this(game);
-        readmeScreen = rs;
+        float imageSize = Assets.WIDTH *20/ 21;
+        readmeImage.setBounds((Assets.WIDTH - imageSize)/2, (Assets.HEIGHT - imageSize)/2, imageSize, imageSize);
     }
 
     public ReadmeScreen(Puzzle game, MainScreen ms) {
@@ -59,13 +54,6 @@ public class ReadmeScreen extends OtherScreen {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-    }
-
-    @Override
-    public void render(float delta) {
-        super.render(delta);
-        getBatch().begin();
-        getFont().draw(getBatch(), "总计: " + getStarNum(), x_num, y_num);
-        getBatch().end();
+        getStarLabel().setText("总计:" + getStarNum());
     }
 }

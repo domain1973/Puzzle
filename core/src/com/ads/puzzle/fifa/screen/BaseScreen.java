@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 /**
  * Created by Administrator on 2014/7/21.
@@ -18,30 +20,31 @@ public class BaseScreen extends ScreenAdapter {
     private Stage stage;
     private Batch batch;
     private Puzzle puzzle;
-    private BitmapFont font;
     private BitmapFont gameFont;
-    private BitmapFont dlgFont;
     private float y_bar;
+    protected ImageButton returnBtn;
 
     public BaseScreen(Puzzle game) {
         stage = new Stage();
         puzzle = game;
         y_bar = Assets.HEIGHT - Assets.TOPBAR_HEIGHT;
         batch = stage.getBatch();
-        font = new BitmapFont(Gdx.files.internal("other.fnt"),
-                Gdx.files.internal("other.png"), false);
         gameFont = new BitmapFont(Gdx.files.internal("puzzle.fnt"),
                 Gdx.files.internal("puzzle.png"), false);
-        dlgFont = new BitmapFont(Gdx.files.internal("dlg.fnt"),
-                Gdx.files.internal("dlg.png"), false);
     }
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage); // 设置输入接收器
         Image bg = new Image(Assets.gameBg);
         bg.setBounds(0, 0, Assets.WIDTH, Assets.HEIGHT);
-        stage.addActor(bg);
+        addActor(bg);
+        Gdx.input.setInputProcessor(stage); // 设置输入接收器
+    }
+
+    protected void createBtns() {
+        returnBtn = new ImageButton(new TextureRegionDrawable(Assets.returnTr));
+        returnBtn.setBounds(0, getY_bar(),Assets.TOPBAR_HEIGHT, Assets.TOPBAR_HEIGHT);
+        addActor(returnBtn);
     }
 
     protected void addActor(Actor actor) {
@@ -60,16 +63,8 @@ public class BaseScreen extends ScreenAdapter {
         return puzzle;
     }
 
-    public BitmapFont getFont() {
-        return font;
-    }
-
     public BitmapFont getGameFont() {
         return gameFont;
-    }
-
-    public BitmapFont getDlgFont() {
-        return dlgFont;
     }
 
     public Stage getStage() {

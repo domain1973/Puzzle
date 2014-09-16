@@ -16,61 +16,9 @@
 
 package com.ads.puzzle.fifa;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-
 public class Settings {
-
-    public static boolean soundEnabled = true;
-    public final static int[] highscores = new int[]{100, 80, 50, 30, 10};
-    public final static String file = ".puzzle";
-    private static int lights = 5;
-
-    public static void load() {
-        try {
-            Answer.gateStars.add(0);
-            FileHandle filehandle = Gdx.files.external(file);
-            String[] strings = filehandle.readString().split("\n");
-            soundEnabled = Boolean.parseBoolean(strings[0]);
-            for (int i = 0; i < 5; i++) {
-                highscores[i] = Integer.parseInt(strings[i + 1]);
-            }
-        } catch (Throwable e) {
-            // :( It's ok we have defaults
-        }
-    }
-
-    public static void save() {
-        try {
-            FileHandle filehandle = Gdx.files.external(file);
-            filehandle.writeString(Boolean.toString(soundEnabled) + "\n", false);
-            for (int i = 0; i < 5; i++) {
-                filehandle.writeString(Integer.toString(highscores[i]) + "\n", true);
-            }
-        } catch (Throwable e) {
-        }
-    }
-
-    public static void addScore(int score) {
-        for (int i = 0; i < 5; i++) {
-            if (highscores[i] < score) {
-                for (int j = 4; j > i; j--)
-                    highscores[j] = highscores[j - 1];
-                highscores[i] = score;
-                break;
-            }
-        }
-    }
-
-    public static void sublight() {
-        lights --;
-    }
-
-    public static void addlight() {
-        lights ++;
-    }
-
-    public static int getLights() {
-        return lights;
-    }
+    public static boolean musicEnabled;
+    public static boolean soundEnabled;
+    public static int passGateNum;
+    public static int helpNum;
 }

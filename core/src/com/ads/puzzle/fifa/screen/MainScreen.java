@@ -2,8 +2,6 @@ package com.ads.puzzle.fifa.screen;
 
 import com.ads.puzzle.fifa.Assets;
 import com.ads.puzzle.fifa.Puzzle;
-import com.ads.puzzle.fifa.Settings;
-import com.ads.puzzle.fifa.window.GameExitDialog;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -15,38 +13,33 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  * Created by Ads on 2014/6/22.
  */
 public class MainScreen extends BaseScreen {
-    private Puzzle game;
+    private Puzzle puzzle;
 
-    public MainScreen(Puzzle game) {
-        super(game);
-        this.game = game;
+    public MainScreen(Puzzle p) {
+        super(p);
+        puzzle = p;
     }
 
     @Override
     public void show() {
         super.show();
         Image theme = new Image(Assets.theme);
-        theme.setPosition((Assets.WIDTH - theme.getWidth()) / 2, Assets.HEIGHT / 2);
+        float themeSize = Assets.WIDTH * 3 / 4;
+        theme.setBounds((Assets.WIDTH - themeSize) / 2, Assets.HEIGHT / 2, themeSize, themeSize);
 
-        float btnSize = Assets.WIDTH *2/ 5;
-        float btnPlayX = (Assets.WIDTH - btnSize) / 2;
-        float btnPlayY = Assets.HEIGHT / 4;
-        ImageButton playBtn = new ImageButton(new TextureRegionDrawable(Assets.playBtn), new TextureRegionDrawable(Assets.playBtnDown));
-        playBtn.setBounds(btnPlayX, btnPlayY, btnSize, btnSize);
+        float btnW = Assets.WIDTH / 2;
+        float btnH = btnW / 5.5f;
+        float btnPlayX = (Assets.WIDTH - btnW) / 2;
+        float btnPlayY = Assets.HEIGHT / 3;
+        ImageButton playBtn = new ImageButton(new TextureRegionDrawable(Assets.playBtn), new TextureRegionDrawable(Assets.playDownBtn));
+        playBtn.setBounds(btnPlayX, btnPlayY, btnW, btnH);
+        ImageButton helpBtn = new ImageButton(new TextureRegionDrawable(Assets.helpBtn), new TextureRegionDrawable(Assets.helpDownBtn));
+        helpBtn.setBounds(btnPlayX, btnPlayY - btnH * 3 / 2, btnW, btnH);
 
-        float btnSmallSize = Assets.WIDTH / 5;
-        float btnPlayXLeft = btnPlayX - btnSmallSize;
-        ImageButton settingBtn = new ImageButton(new TextureRegionDrawable(Assets.playBtn), new TextureRegionDrawable(Assets.playBtnDown));
-        settingBtn.setBounds(btnPlayXLeft, btnPlayY, btnSmallSize, btnSmallSize);
-
-        ImageButton aboutBtn = new ImageButton(new TextureRegionDrawable(Assets.playBtn), new TextureRegionDrawable(Assets.playBtnDown));
-        aboutBtn.setBounds(btnPlayX + btnSize, btnPlayY, btnSmallSize, btnSmallSize);
-
-        ImageButton helpBtn = new ImageButton(new TextureRegionDrawable(Assets.settingBtn), new TextureRegionDrawable(Assets.settingBtnDown));
-        helpBtn.setBounds(btnPlayX, btnPlayY - btnSmallSize, btnSmallSize, btnSmallSize);
-
-        ImageButton exitBtn = new ImageButton(new TextureRegionDrawable(Assets.settingBtn), new TextureRegionDrawable(Assets.settingBtnDown));
-        exitBtn.setBounds(btnPlayX + btnSmallSize, btnPlayY - btnSmallSize, btnSmallSize, btnSmallSize);
+        ImageButton settingBtn = new ImageButton(new TextureRegionDrawable(Assets.settingBtn), new TextureRegionDrawable(Assets.settingDownBtn));
+        settingBtn.setBounds(btnPlayX, btnPlayY - 3 * btnH, btnW, btnH);
+        ImageButton exitBtn = new ImageButton(new TextureRegionDrawable(Assets.exitBtn), new TextureRegionDrawable(Assets.exitDownBtn));
+        exitBtn.setBounds(btnPlayX, btnPlayY - 9 * btnH / 2, btnW, btnH);
 
         playBtn.addListener(new InputListener() {
             @Override
@@ -57,7 +50,7 @@ public class MainScreen extends BaseScreen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new LevelScreen(game));
+                puzzle.setScreen(new LevelScreen(puzzle));
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -70,7 +63,7 @@ public class MainScreen extends BaseScreen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new SettingScreen(game));
+                puzzle.setScreen(new SettingScreen(puzzle));
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -83,7 +76,7 @@ public class MainScreen extends BaseScreen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new ReadmeScreen(game, MainScreen.this));
+                puzzle.setScreen(new ReadmeScreen(puzzle, MainScreen.this));
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -96,42 +89,25 @@ public class MainScreen extends BaseScreen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                addActor(new GameExitDialog(MainScreen.this,
-                        "你确定要退出吗?"));
+                puzzle.getPEvent().exit();
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-        aboutBtn.addListener(new InputListener() {
 
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y,
-                                     int pointer, int button) {
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.getPayEvent().handler();
-                super.touchUp(event, x, y, pointer, button);
-            }
-        });
         addActor(theme);
         addActor(playBtn);
         addActor(settingBtn);
         addActor(helpBtn);
         addActor(exitBtn);
-        addActor(aboutBtn);
     }
 
     @Override
     public void pause() {
-        Settings.save();
     }
 
     @Override
     public void dispose() {
-        getFont().dispose();
+        getGameFont().dispose();
         getStage().dispose();
     }
-
 }

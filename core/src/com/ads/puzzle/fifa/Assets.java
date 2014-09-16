@@ -18,7 +18,6 @@ package com.ads.puzzle.fifa;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -39,8 +38,6 @@ public class Assets {
     public static TextureRegion dlgBg;
     public static TextureRegion star;
     public static TextureRegion star_null;
-    public static TextureRegion gatestar;
-    public static TextureRegion gatestar_null;
     public static TextureRegion readme;
     public static TextureRegion aboutInfo;
 
@@ -59,11 +56,25 @@ public class Assets {
     public static TextureRegion nomusic;
     public static TextureRegion nosound;
     public static TextureRegion about;
+    public static TextureRegion buy;
+    public static TextureRegion forbid;
 
     public static TextureRegion playBtn;
-    public static TextureRegion playBtnDown;
+    public static TextureRegion playDownBtn;
+    public static TextureRegion exitBtn;
+    public static TextureRegion exitDownBtn;
     public static TextureRegion settingBtn;
-    public static TextureRegion settingBtnDown;
+    public static TextureRegion settingDownBtn;
+    public static TextureRegion helpBtn;
+    public static TextureRegion helpDownBtn;
+    public static TextureRegion musicOpenBtn;
+    public static TextureRegion musicCloseBtn;
+    public static TextureRegion soundOpenBtn;
+    public static TextureRegion soundCloseBtn;
+    public static TextureRegion aboutBtn;
+    public static TextureRegion aboutDownBtn;
+    public static TextureRegion resetGameBtn;
+    public static TextureRegion resetGameDownBtn;
     public static TextureRegion levelPreBtn;
     public static TextureRegion levelNextBtn;
     public static TextureRegion gate_0star;
@@ -71,11 +82,12 @@ public class Assets {
     public static TextureRegion gate_2star;
     public static TextureRegion gate_3star;
     public static TextureRegion gate_lock;
+    public static TextureRegion lock;
     public static TextureRegion[] cubes;
 
     public static List<Sprite> levels;
     public static Map<Integer, List<Sprite>> levelSpriteMap;//关卡精灵图标
-    public static float spriteSize;///关卡精灵图标大小
+    public static float SPRITESIZE;///关卡精灵图标大小
     public static Sprite[] pieces;
     public static float TOP_BTN_SIZE;
     public static float TOPBAR_HEIGHT;//顶部按钮条的高度
@@ -99,7 +111,7 @@ public class Assets {
         creteMagicCubes(atlas);
         try {
             skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -111,23 +123,19 @@ public class Assets {
         TOP_BTN_SIZE = TOPBAR_HEIGHT;
         SMALL_PIECE_SIZE = WIDTH / 4;
         PIECE_SIZE = WIDTH / 2 - space * 2;
-        LEVEL_IMAGE_SIZE = WIDTH ;
-        LEVEL_IMAGE_OFF_SIZE = WIDTH/7;
+        LEVEL_IMAGE_SIZE = WIDTH;
+        LEVEL_IMAGE_OFF_SIZE = WIDTH / 7;
     }
 
     private static void loadBmps(TextureAtlas atlas) {
         gameBg = atlas.findRegion("gamebg");
-        if (Gdx.graphics.getHeight() > 900) {
-            theme = atlas.findRegion("theme_big");
-        } else {
-            theme = atlas.findRegion("theme_small");
-        }
+        theme = atlas.findRegion("theme");
         layerBg = atlas.findRegion("layerbg");//图层背景,对话框使用
         winBg = atlas.findRegion("winbg");
         dlgBg = atlas.findRegion("dlgbg");
         resultBg = atlas.findRegion("result");
         areaBg = atlas.findRegion("area");
-        readme = atlas.findRegion("readme_small");
+        readme = atlas.findRegion("readme");
         aboutInfo = atlas.findRegion("about_small");
 
         suspend = atlas.findRegion("suspend");
@@ -145,16 +153,28 @@ public class Assets {
         nosound = atlas.findRegion("nosound");
         continueTr = atlas.findRegion("continue");
         about = atlas.findRegion("about");
-
+        buy = atlas.findRegion("buy");
         star = atlas.findRegion("star");
         star_null = atlas.findRegion("star_null");
-        gatestar = atlas.findRegion("gatestar");
-        gatestar_null = atlas.findRegion("gatestar_null");
+        forbid = atlas.findRegion("forbid");
+        lock = atlas.findRegion("lock");
 
-        playBtnDown = atlas.findRegion("btn0");
-        playBtn = atlas.findRegion("btn01");
-        settingBtnDown = atlas.findRegion("btn0");
-        settingBtn = atlas.findRegion("btn01");
+        playBtn = atlas.findRegion("playbtn");
+        playDownBtn = atlas.findRegion("playdownbtn");
+        exitBtn = atlas.findRegion("exitbtn");
+        exitDownBtn = atlas.findRegion("exitdownbtn");
+        settingBtn = atlas.findRegion("settingbtn");
+        settingDownBtn = atlas.findRegion("settingdownbtn");
+        helpBtn = atlas.findRegion("helpbtn");
+        helpDownBtn = atlas.findRegion("helpdownbtn");
+        musicOpenBtn = atlas.findRegion("musicopenbtn");
+        musicCloseBtn = atlas.findRegion("musicclosebtn");
+        soundOpenBtn = atlas.findRegion("soundopenbtn");
+        soundCloseBtn = atlas.findRegion("soundclosebtn");
+        aboutBtn = atlas.findRegion("aboutbtn");
+        aboutDownBtn = atlas.findRegion("aboutdownbtn");
+        resetGameBtn = atlas.findRegion("resetgamebtn");
+        resetGameDownBtn = atlas.findRegion("resetgamedownbtn");
         levelPreBtn = atlas.findRegion("levelpre");
         levelNextBtn = atlas.findRegion("levelnext");
 
@@ -184,7 +204,7 @@ public class Assets {
                 String spriteName = String.valueOf(i * 100 + m);
                 Sprite s1 = atlas.createSprite(spriteName);
                 if (s1 == null) break;
-                spriteSize = (int)WIDTH/7;
+                SPRITESIZE = (int) WIDTH / 7;
                 sprites.add(s1);
                 m++;
             }

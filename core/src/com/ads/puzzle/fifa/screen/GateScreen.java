@@ -3,8 +3,8 @@ package com.ads.puzzle.fifa.screen;
 import com.ads.puzzle.fifa.Answer;
 import com.ads.puzzle.fifa.Assets;
 import com.ads.puzzle.fifa.Puzzle;
+import com.ads.puzzle.fifa.Settings;
 import com.ads.puzzle.fifa.actors.Gate;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -14,29 +14,35 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  * Created by Administrator on 2014/6/22.
  */
 public class GateScreen extends OtherScreen {
-    private static final int GATE_MAX = 12;
     private int level;
     private int starNum;
-    private float x_num;
-    private float y_num;
 
-    public GateScreen(Puzzle puzzle, int level) {
+    public GateScreen(Puzzle puzzle, int lv) {
         super(puzzle);
-        this.level = level;
-        x_num = Assets.WIDTH - 2 * Assets.TOPBAR_HEIGHT;
-        y_num = Assets.HEIGHT - 5;
+        level = lv;
     }
 
     @Override
     public void show() {
         super.show();
-        createBtns();
+        buildGateImage();
+        returnBtn.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
+                getPuzzle().setScreen(new LevelScreen(getPuzzle()));
+                return true;
+            }
+        });
+        getStarLabel().setText("   " + starNum + "/36");
+    }
 
+    private void buildGateImage() {
         float gateBtnSize = Assets.WIDTH / 5;
-        for (int i = 0; i < GATE_MAX; i++) {
-            int gateNum = level * GATE_MAX + i;
+        for (int i = 0; i < Answer.GATE_MAX; i++) {
+            int gateNum = level * Answer.GATE_MAX + i;
             TextureRegion gateTRegion = null;
-            if (getPuzzle().getPassGateNum() >= gateNum || gateNum == 0) {
+            if (Settings.passGateNum >= gateNum || gateNum == 0) {
                 int num = Answer.gateStars.get(gateNum);
                 starNum = starNum + num;
                 switch (num) {
@@ -64,7 +70,7 @@ public class GateScreen extends OtherScreen {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y,
                                          int pointer, int button) {
-                    if (gate.getGateNum() <= getPuzzle().getPassGateNum()) {
+                    if (gate.getGateNum() <= Settings.passGateNum) {
                         getPuzzle().setScreen(new GameScreen(getPuzzle(), level, gate.getGateNum()));
                     }
                     return true;
@@ -72,21 +78,5 @@ public class GateScreen extends OtherScreen {
             });
             addActor(gate);
         }
-        returnBtn.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y,
-                                     int pointer, int button) {
-                getPuzzle().setScreen(new LevelScreen(getPuzzle()));
-                return true;
-            }
-        });
-    }
-
-    @Override
-    public void render(float delta) {
-        super.render(delta);
-        getBatch().begin();
-        getFont().draw(getBatch(), starNum + "/36", x_num, y_num);
-        getBatch().end();
     }
 }

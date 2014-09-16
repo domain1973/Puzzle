@@ -76,20 +76,26 @@ public class PieceListener extends GestureDetector.GestureAdapter {
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
         if (downActor != null) {
-            downActor.setPosition(downActor.getX() + deltaX, downActor.getY() - deltaY);
-            if (pieceCtrl.getFixAreaBounds().contains(downActor.getX(), downActor.getY())) {
-                downActor.setWidth(SMALL_PIECE_SIZE);
-                downActor.setHeight(SMALL_PIECE_SIZE);
+            float x1 = downActor.getX() + deltaX;
+            float y1 = downActor.getY() - deltaY;
+            if (x1 > 0 && y1 > 0) {
+                downActor.setPosition(x1, y1);
+                if (pieceCtrl.getFixAreaBounds().contains(downActor.getX(), downActor.getY())) {
+                    downActor.setWidth(SMALL_PIECE_SIZE);
+                    downActor.setHeight(SMALL_PIECE_SIZE);
+                } else {
+                    downActor.setWidth(PIECE_SIZE);
+                    downActor.setHeight(PIECE_SIZE);
+                }
+                if (areaController.getBounds().contains(downActor.getX(), downActor.getY())) {
+                    downActor.setWidth(PIECE_SIZE);
+                    downActor.setHeight(PIECE_SIZE);
+                } else {
+                    downActor.setWidth(SMALL_PIECE_SIZE);
+                    downActor.setHeight(SMALL_PIECE_SIZE);
+                }
             } else {
-                downActor.setWidth(PIECE_SIZE);
-                downActor.setHeight(PIECE_SIZE);
-            }
-            if (areaController.getBounds().contains(downActor.getX(), downActor.getY())) {
-                downActor.setWidth(PIECE_SIZE);
-                downActor.setHeight(PIECE_SIZE);
-            } else {
-                downActor.setWidth(SMALL_PIECE_SIZE);
-                downActor.setHeight(SMALL_PIECE_SIZE);
+                downActor.setPosition(raw_x, raw_y);
             }
         }
         return super.pan(x, y, deltaX, deltaY);

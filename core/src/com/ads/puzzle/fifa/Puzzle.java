@@ -4,17 +4,15 @@ import com.ads.puzzle.fifa.screen.MainScreen;
 import com.badlogic.gdx.Game;
 
 public class Puzzle extends Game {
-    private int passGateNum;
     private MainScreen mainScreen;
-    private PayEvent payEvent;
+    private PEvent pEvent;
 
-    public Puzzle(PayEvent pe) {
-        payEvent = pe;
+    public Puzzle(PEvent pe) {
+        pEvent = pe;
     }
 
     @Override
     public void create() {
-        Settings.load();
         Assets.load();
         mainScreen = new MainScreen(this);
         setScreen(mainScreen);
@@ -24,15 +22,7 @@ public class Puzzle extends Game {
         return mainScreen;
     }
 
-    public int getPassGateNum() {
-        return passGateNum;
-    }
-
-    public void setPassGateNum(int passGateNum) {
-        this.passGateNum = passGateNum;
-    }
-
-    public PayEvent getPayEvent() {
-        return payEvent;
+    public PEvent getPEvent() {
+        return pEvent;
     }
 }

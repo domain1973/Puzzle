@@ -2,6 +2,7 @@ package com.ads.puzzle.fifa.window;
 
 import com.ads.puzzle.fifa.Answer;
 import com.ads.puzzle.fifa.Assets;
+import com.ads.puzzle.fifa.Settings;
 import com.ads.puzzle.fifa.controller.AreaController;
 import com.ads.puzzle.fifa.controller.ChallengeController;
 import com.ads.puzzle.fifa.controller.IController;
@@ -38,7 +39,7 @@ public class ResultWindow extends BaseWindow {
     private ScheduledExecutorService executStarCount;
     private ParticleEffect effect;
     private int starIndex;
-    private int starNum = 1;
+    private int starNum;
     private boolean exeTimer = false;
     private boolean end = false;
     private ImageButton gateBtn;
@@ -47,10 +48,11 @@ public class ResultWindow extends BaseWindow {
     private Group group;
     private ChallengeController challengeCtrl;
 
-    public ResultWindow(GameScreen gameScreen) {
-        super("你是天才!", new Window.WindowStyle(gameScreen.getFont(), Color.WHITE, new TextureRegionDrawable(
+    public ResultWindow(GameScreen gs, int num) {
+        super(Answer.TITLES[num], new Window.WindowStyle(gs.getGameFont(), Color.WHITE, new TextureRegionDrawable(
                 Assets.resultBg)));
-        this.gameScreen = gameScreen;
+        starNum = num;
+        gameScreen = gs;
         create();
     }
 
@@ -70,8 +72,6 @@ public class ResultWindow extends BaseWindow {
         initEffect();
         group = gameScreen.getStage().getRoot();
         challengeCtrl = (ChallengeController) group.findActor(IController.CHALLENGE_CTRL);
-        setStarNum(challengeCtrl);
-        Gdx.input.setInputProcessor(gameScreen.getStage());
     }
 
     private void addButtons() {
@@ -100,6 +100,21 @@ public class ResultWindow extends BaseWindow {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
+        refresh.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                layerBg.remove();
+                gameScreen.refreshGame();
+                ResultWindow.this.remove();
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
         next.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y,
@@ -114,8 +129,8 @@ public class ResultWindow extends BaseWindow {
                 challengeCtrl.handler();
                 ((PieceController) group.findActor(IController.PIECE_CTRL)).handler();
                 int gateNum = challengeCtrl.getGateNum();
-                if (gateNum > gameScreen.getPuzzle().getPassGateNum()) {
-                    gameScreen.getPuzzle().setPassGateNum(gateNum);
+                if (gateNum > Settings.passGateNum) {
+                    Settings.passGateNum = gateNum;
                 }
                 if (Answer.gateStars.size() <= gateNum) {
                     Answer.gateStars.add(0);
@@ -127,32 +142,24 @@ public class ResultWindow extends BaseWindow {
         });
     }
 
-    private void setStarNum(ChallengeController challengeCtrl) {
-        int minute = gameScreen.getSeconds()/60;
-        if (minute <= 3) {
-            starNum = 3;
-        } else if (minute > 3 && minute <= 6) {
-            starNum = 2;
-        }
-        Answer.gateStars.set(challengeCtrl.getGateNum(), starNum);
-    }
-
     private void initEffect() {
         effect = new ParticleEffect();
         effect.load(Gdx.files.internal("data/test.p"), Gdx.files.internal("data/"));
     }
 
     private void addStars() {
-        float star_w = space;
-        float v = (w - star_w) / 2;
+        float starW = space;
+        float v = (w - starW) / 2;
         star_nulls = new Image[3];
         stars = new Image[3];
+        float y1 = w * 3 / 5;
         for (int i = 0; i < 3; i++) {
             star_nulls[i] = new Image(Assets.star_null);
             stars[i] = new Image(Assets.star);
             int t = i - 1;
-            star_nulls[i].setBounds(v + t * star_w, w * 3 / 5, star_w, star_w);
-            stars[i].setBounds(v + t * star_w, w * 3 / 5, star_w, star_w);
+            float x1 = v + t * starW;
+            star_nulls[i].setBounds(x1, y1, starW, starW);
+            stars[i].setBounds(x1, y1, starW, starW);
             addActor(star_nulls[i]);
         }
     }
@@ -160,19 +167,22 @@ public class ResultWindow extends BaseWindow {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        if (!end) {
-            if (!exeTimer) {
-                changeStar();
-                exeTimer = true;
-            }
-            if (starIndex < starNum) {
-                Image star = stars[starIndex];
-                float space = star.getWidth() / 2;
-                effect.setPosition(star.getX() + getX() + space, star.getY() + getY() + space);
-                effect.draw(batch, Gdx.graphics.getDeltaTime());
-                addActor(star);
-            } else {
-                end = true;
+        if (starNum > 0) {
+            if (!end) {
+                if (!exeTimer) {
+                    changeStar();
+                    exeTimer = true;
+                }
+                if (starIndex < starNum) {
+                    Image star = stars[starIndex];
+                    float space = star.getWidth() / 2;
+                    effect.setPosition(star.getX() + getX() + space, star.getY() + getY() + space);
+                    effect.draw(batch, Gdx.graphics.getDeltaTime());
+                    addActor(star);
+                } else {
+                    end = true;
+                    Gdx.input.setInputProcessor(gameScreen.getStage());
+                }
             }
         }
     }

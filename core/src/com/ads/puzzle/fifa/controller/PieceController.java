@@ -27,7 +27,8 @@ public class PieceController extends IController {
     @Override
     public void handler() {
         SnapshotArray<Actor> actors = getChildren();
-        for (Actor actor : actors) {
+        for (int i=0; i<actors.size; i++) {
+            Actor actor = actors.get(i);
             Piece piece = (Piece) actor;
             piece.return2BeginArea();
         }

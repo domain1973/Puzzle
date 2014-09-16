@@ -11,14 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  * Created by Administrator on 2014/6/22.
  */
 public class SettingScreen extends OtherScreen {
-    Puzzle game;
-    private float btn_font_x;
-    private float btn_font_x1;
-    private float themeSize;
-    private float btn_font_y;
-    private float btn_font_y1;
-    private float btn_font_y2;
-    private float btn_font_y3;
+    private Puzzle game;
 
     public SettingScreen(Puzzle game) {
         super(game);
@@ -42,40 +35,23 @@ public class SettingScreen extends OtherScreen {
             }
         });
 
-        ImageButton playBtn = new ImageButton(new TextureRegionDrawable(Assets.playBtn), new TextureRegionDrawable(Assets.playBtnDown));
-        float x = (Assets.WIDTH - playBtn.getWidth()) / 2;
-        btn_font_x = x + playBtn.getWidth() / 3 - 30;
-        btn_font_x1 = x + playBtn.getWidth() * 2 / 3;
+        float btnW = Assets.WIDTH /2;
+        float btnH = btnW / 5.5f;
+        ImageButton musicBtn = new ImageButton(new TextureRegionDrawable(Assets.musicOpenBtn), new TextureRegionDrawable(Assets.musicOpenBtn));
+        float x = (Assets.WIDTH - btnW) / 2;
         float btn_y = Assets.HEIGHT * 2 / 3;
-        playBtn.setPosition(x, btn_y);
-        btn_font_y = btn_y + playBtn.getHeight();
-        ImageButton settingBtn = new ImageButton(new TextureRegionDrawable(Assets.settingBtn), new TextureRegionDrawable(Assets.settingBtnDown));
-        float btn_y1 = btn_y - playBtn.getHeight() * 3 / 2;
-        settingBtn.setPosition(x, btn_y1);
-        btn_font_y1 = btn_y1 + playBtn.getHeight();
-        ImageButton helpBtn = new ImageButton(new TextureRegionDrawable(Assets.settingBtn), new TextureRegionDrawable(Assets.settingBtnDown));
-        float btn_y2 = btn_y - playBtn.getHeight() * 3;
-        helpBtn.setPosition(x, btn_y2);
-        btn_font_y2 = btn_y2 + playBtn.getHeight();
-        ImageButton aboutBtn = new ImageButton(new TextureRegionDrawable(Assets.settingBtn), new TextureRegionDrawable(Assets.settingBtnDown));
-        float btn_y3 = btn_y - playBtn.getHeight() * 9/2;
-        aboutBtn.setPosition(x, btn_y3);
-        btn_font_y3 = btn_y3 + playBtn.getHeight();
+        musicBtn.setBounds(x, btn_y, btnW, btnH);
+        ImageButton soundBtn = new ImageButton(new TextureRegionDrawable(Assets.soundOpenBtn), new TextureRegionDrawable(Assets.soundOpenBtn));
+        float btn_y1 = btn_y -btnH * 3 / 2;
+        soundBtn.setBounds(x, btn_y1, btnW, btnH);
+        ImageButton resetGameBtn = new ImageButton(new TextureRegionDrawable(Assets.resetGameBtn), new TextureRegionDrawable(Assets.resetGameDownBtn));
+        float btn_y2 = btn_y - btnH * 3;
+        resetGameBtn.setBounds(x, btn_y2, btnW, btnH);
+        ImageButton aboutBtn = new ImageButton(new TextureRegionDrawable(Assets.aboutBtn), new TextureRegionDrawable(Assets.aboutDownBtn));
+        float btn_y3 = btn_y - btnH * 9/2;
+        aboutBtn.setBounds(x, btn_y3, btnW, btnH);
 
-        playBtn.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y,
-                                     int pointer, int button) {
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new LevelScreen(game));
-                super.touchUp(event, x, y, pointer, button);
-            }
-        });
-        helpBtn.addListener(new InputListener() {
+        musicBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y,
                                      int pointer, int button) {
@@ -87,25 +63,23 @@ public class SettingScreen extends OtherScreen {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-        addActor(playBtn);
-        addActor(settingBtn);
-        addActor(helpBtn);
+        resetGameBtn.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                getPuzzle().getPEvent().resetGame();
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+        getStarLabel().setText("总计:" + getStarNum());
+        addActor(musicBtn);
+        addActor(soundBtn);
+        addActor(resetGameBtn);
         addActor(aboutBtn);
-    }
-
-    @Override
-    public void render(float delta) {
-        super.render(delta);
-        getBatch().begin();
-        getFont().draw(getBatch(), "总计: " + getStarNum(), x_num, y_num);
-        getFont().draw(getBatch(), "音效", btn_font_x, btn_font_y);
-        getFont().draw(getBatch(), "关", btn_font_x1, btn_font_y);
-        getFont().draw(getBatch(), "音乐", btn_font_x, btn_font_y1);
-        getFont().draw(getBatch(), "关", btn_font_x1, btn_font_y1);
-        getFont().draw(getBatch(), "重置", btn_font_x, btn_font_y2);
-        getFont().draw(getBatch(), "游戏", btn_font_x1, btn_font_y2);
-        getFont().draw(getBatch(), "关", btn_font_x, btn_font_y3);
-        getFont().draw(getBatch(), "于", btn_font_x1, btn_font_y3);
-        getBatch().end();
     }
 }
