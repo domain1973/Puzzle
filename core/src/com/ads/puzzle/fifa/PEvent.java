@@ -17,4 +17,5 @@ public abstract  class PEvent {
 
     public abstract void resetGame();
 
+    public abstract void spotAM();
 }

@@ -139,6 +139,11 @@ public class AndroidLauncher extends AndroidApplication implements InitCallbackL
                     }
                 });
             }
+
+            @Override
+            public void spotAM() {
+                spot();
+            }
         }), config);
         // 创建布局
         RelativeLayout layout = new RelativeLayout(this);
@@ -312,12 +317,12 @@ public class AndroidLauncher extends AndroidApplication implements InitCallbackL
             // Toast.makeText(AndroidLauncher.this, "网络连接错误", Toast.LENGTH_SHORT).show();
             handler.post(new Runnable() {
                 public void run() {
-                    new AlertDialog.Builder(AndroidLauncher.this).setTitle("提示").setMessage("连接不到网络。").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    new AlertDialog.Builder(AndroidLauncher.this).setTitle(title).setMessage("连接不到网络,请检查哦!").setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             return;
                         }
-                    }).create().show();
+                    }).setIcon(R.drawable.xiaozi).create().show();
                 }
             });
         } else {
@@ -329,10 +334,6 @@ public class AndroidLauncher extends AndroidApplication implements InitCallbackL
             paymentInfo.setPayMoney(1);
             //订单描述
             paymentInfo.setDesc("10颗智慧星");
-            //【可选】外部订单号
-            paymentInfo.setTradeno("TN2014022010071234");
-            //游戏开发商自定义数据，可选。该值将在用户充值成功后，在支付工具服务器回调给游戏开发商时携带该数据
-            paymentInfo.setCustomInfo("100元宝");
             //调用支付接口
             UmiPaySDKManager.showPayView(this, paymentInfo);
         }
