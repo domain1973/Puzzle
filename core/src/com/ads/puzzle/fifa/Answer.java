@@ -10,11 +10,11 @@ public class Answer {
     public static final int GATE_MAX = 12;
     public final static int GRADE_1 = 3;
     public final static int GRADE_2 = 6;
-    public final static int GRADE_3 = 12;
-    public final static int GRADE_4 = 20;
+    public final static int GRADE_3 = 9;
+    public final static int GRADE_4 = 12;
 
     public final static String[] TITLES = new String[]{
-            "您总算过关了!", "恭喜您过关了!", "您真棒!", "您是天才!"};
+            "时间已到闯关失败,努力哦!", "恭喜您过关了!", "您真棒!", "您是天才!"};
 
     public final static String[] VALUES =
             {"03,11,22,30",

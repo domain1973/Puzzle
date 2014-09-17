@@ -35,21 +35,20 @@ public class SettingScreen extends OtherScreen {
             }
         });
 
-        float btnW = Assets.WIDTH /2;
-        float btnH = btnW / 5.5f;
-        ImageButton musicBtn = new ImageButton(new TextureRegionDrawable(Assets.musicOpenBtn), new TextureRegionDrawable(Assets.musicOpenBtn));
-        float x = (Assets.WIDTH - btnW) / 2;
+        float otherSize = Assets.WIDTH /5;
+        ImageButton musicBtn = new ImageButton(new TextureRegionDrawable(Assets.music), new TextureRegionDrawable(Assets.music));
+        float x = (Assets.WIDTH - otherSize) / 2;
         float btn_y = Assets.HEIGHT * 2 / 3;
-        musicBtn.setBounds(x, btn_y, btnW, btnH);
-        ImageButton soundBtn = new ImageButton(new TextureRegionDrawable(Assets.soundOpenBtn), new TextureRegionDrawable(Assets.soundOpenBtn));
-        float btn_y1 = btn_y -btnH * 3 / 2;
-        soundBtn.setBounds(x, btn_y1, btnW, btnH);
-        ImageButton resetGameBtn = new ImageButton(new TextureRegionDrawable(Assets.resetGameBtn), new TextureRegionDrawable(Assets.resetGameDownBtn));
-        float btn_y2 = btn_y - btnH * 3;
-        resetGameBtn.setBounds(x, btn_y2, btnW, btnH);
-        ImageButton aboutBtn = new ImageButton(new TextureRegionDrawable(Assets.aboutBtn), new TextureRegionDrawable(Assets.aboutDownBtn));
-        float btn_y3 = btn_y - btnH * 9/2;
-        aboutBtn.setBounds(x, btn_y3, btnW, btnH);
+        musicBtn.setBounds(x, btn_y, otherSize, otherSize);
+        ImageButton soundBtn = new ImageButton(new TextureRegionDrawable(Assets.sound), new TextureRegionDrawable(Assets.sound));
+        float btn_y1 = btn_y -otherSize * 3 / 2;
+        soundBtn.setBounds(x, btn_y1, otherSize, otherSize);
+        ImageButton aboutBtn = new ImageButton(new TextureRegionDrawable(Assets.about), new TextureRegionDrawable(Assets.about));
+        float btn_y2 = btn_y - otherSize * 3;
+        aboutBtn.setBounds(x, btn_y2, otherSize, otherSize);
+        ImageButton resetGameBtn = new ImageButton(new TextureRegionDrawable(Assets.resetGameBtn), new TextureRegionDrawable(Assets.resetGameBtn));
+        float btn_y3 = btn_y - otherSize * 9/2;
+        resetGameBtn.setBounds(x, btn_y3, otherSize, otherSize);
 
         musicBtn.addListener(new InputListener() {
             @Override

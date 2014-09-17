@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Administrator on 2014/7/20.
  */
-public class ResultWindow extends BaseWindow {
+public class ResultWin extends BaseWin {
     private GameScreen gameScreen;
     private float w;
     private float x;
@@ -48,7 +48,7 @@ public class ResultWindow extends BaseWindow {
     private Group group;
     private ChallengeController challengeCtrl;
 
-    public ResultWindow(GameScreen gs, int num) {
+    public ResultWin(GameScreen gs, int num) {
         super(Answer.TITLES[num], new Window.WindowStyle(gs.getGameFont(), Color.WHITE, new TextureRegionDrawable(
                 Assets.resultBg)));
         starNum = num;
@@ -68,7 +68,9 @@ public class ResultWindow extends BaseWindow {
         addStars();
         addActor(gateBtn);
         addActor(refresh);
-        addActor(next);
+        if (starNum > 0) {
+            addActor(next);
+        }
         initEffect();
         group = gameScreen.getStage().getRoot();
         challengeCtrl = (ChallengeController) group.findActor(IController.CHALLENGE_CTRL);
@@ -111,7 +113,7 @@ public class ResultWindow extends BaseWindow {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 layerBg.remove();
                 gameScreen.refreshGame();
-                ResultWindow.this.remove();
+                ResultWin.this.remove();
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -135,7 +137,7 @@ public class ResultWindow extends BaseWindow {
                 if (Answer.gateStars.size() <= gateNum) {
                     Answer.gateStars.add(0);
                 } 
-                ResultWindow.this.remove();
+                ResultWin.this.remove();
                 gameScreen.return2init();
                 super.touchUp(event, x, y, pointer, button);
             }

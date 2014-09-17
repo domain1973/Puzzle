@@ -12,7 +12,7 @@ import com.ads.puzzle.fifa.controller.IController;
 import com.ads.puzzle.fifa.controller.PieceController;
 import com.ads.puzzle.fifa.listener.PieceDetector;
 import com.ads.puzzle.fifa.listener.PieceListener;
-import com.ads.puzzle.fifa.window.ResultWindow;
+import com.ads.puzzle.fifa.window.ResultWin;
 import com.ads.puzzle.fifa.window.SupsendWin;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -271,7 +271,7 @@ public class GameScreen extends BaseScreen {
         }
         if (openResultWin) {
             computerStarNum();
-            addActor(new ResultWindow(this, starNum));
+            addActor(new ResultWin(this, starNum));
             openResultWin = false;
         }
     }
@@ -291,7 +291,10 @@ public class GameScreen extends BaseScreen {
     }
 
     private void handleGate() {
-        if (gestureDetector.isPass(challengeCtrl.getGateNum())) {
+        if (seconds / 60 > Answer.GRADE_4) {//game over
+            openResultWin = true; //关卡结束
+            isPass = true;
+        } else if (gestureDetector.isPass(challengeCtrl.getGateNum())) {
             Gdx.input.setInputProcessor(null);
             executTime.shutdown();
             Runnable runner = new Runnable() {

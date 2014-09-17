@@ -27,19 +27,20 @@ public class MainScreen extends BaseScreen {
         float themeSize = Assets.WIDTH * 3 / 4;
         theme.setBounds((Assets.WIDTH - themeSize) / 2, Assets.HEIGHT / 2, themeSize, themeSize);
 
-        float btnW = Assets.WIDTH / 2;
-        float btnH = btnW / 5.5f;
-        float btnPlayX = (Assets.WIDTH - btnW) / 2;
+        float playSize = Assets.WIDTH / 3;
+        float otherSize = Assets.WIDTH /7;
+        float btnPlayX = (Assets.WIDTH - playSize) / 2;
+        float otherX = otherSize;
         float btnPlayY = Assets.HEIGHT / 3;
-        ImageButton playBtn = new ImageButton(new TextureRegionDrawable(Assets.playBtn), new TextureRegionDrawable(Assets.playDownBtn));
-        playBtn.setBounds(btnPlayX, btnPlayY, btnW, btnH);
-        ImageButton helpBtn = new ImageButton(new TextureRegionDrawable(Assets.helpBtn), new TextureRegionDrawable(Assets.helpDownBtn));
-        helpBtn.setBounds(btnPlayX, btnPlayY - btnH * 3 / 2, btnW, btnH);
-
-        ImageButton settingBtn = new ImageButton(new TextureRegionDrawable(Assets.settingBtn), new TextureRegionDrawable(Assets.settingDownBtn));
-        settingBtn.setBounds(btnPlayX, btnPlayY - 3 * btnH, btnW, btnH);
-        ImageButton exitBtn = new ImageButton(new TextureRegionDrawable(Assets.exitBtn), new TextureRegionDrawable(Assets.exitDownBtn));
-        exitBtn.setBounds(btnPlayX, btnPlayY - 9 * btnH / 2, btnW, btnH);
+        ImageButton playBtn = new ImageButton(new TextureRegionDrawable(Assets.playBtn), new TextureRegionDrawable(Assets.playBtn));
+        playBtn.setBounds(btnPlayX, btnPlayY, playSize, playSize);
+        ImageButton helpBtn = new ImageButton(new TextureRegionDrawable(Assets.help), new TextureRegionDrawable(Assets.help));
+        float y = btnPlayY - 3*otherSize/2;
+        helpBtn.setBounds(otherX, y, otherSize, otherSize);
+        ImageButton settingBtn = new ImageButton(new TextureRegionDrawable(Assets.setting), new TextureRegionDrawable(Assets.setting));
+        settingBtn.setBounds(3*otherSize, y, otherSize, otherSize);
+        ImageButton exitBtn = new ImageButton(new TextureRegionDrawable(Assets.exit), new TextureRegionDrawable(Assets.exit));
+        exitBtn.setBounds(5*otherSize, y, otherSize, otherSize);
 
         playBtn.addListener(new InputListener() {
             @Override

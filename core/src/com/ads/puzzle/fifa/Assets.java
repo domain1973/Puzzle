@@ -58,23 +58,10 @@ public class Assets {
     public static TextureRegion about;
     public static TextureRegion buy;
     public static TextureRegion forbid;
+    public static TextureRegion exit;
 
     public static TextureRegion playBtn;
-    public static TextureRegion playDownBtn;
-    public static TextureRegion exitBtn;
-    public static TextureRegion exitDownBtn;
-    public static TextureRegion settingBtn;
-    public static TextureRegion settingDownBtn;
-    public static TextureRegion helpBtn;
-    public static TextureRegion helpDownBtn;
-    public static TextureRegion musicOpenBtn;
-    public static TextureRegion musicCloseBtn;
-    public static TextureRegion soundOpenBtn;
-    public static TextureRegion soundCloseBtn;
-    public static TextureRegion aboutBtn;
-    public static TextureRegion aboutDownBtn;
     public static TextureRegion resetGameBtn;
-    public static TextureRegion resetGameDownBtn;
     public static TextureRegion levelPreBtn;
     public static TextureRegion levelNextBtn;
     public static TextureRegion gate_0star;
@@ -158,23 +145,10 @@ public class Assets {
         star_null = atlas.findRegion("star_null");
         forbid = atlas.findRegion("forbid");
         lock = atlas.findRegion("lock");
+        exit = atlas.findRegion("exit");
 
         playBtn = atlas.findRegion("playbtn");
-        playDownBtn = atlas.findRegion("playdownbtn");
-        exitBtn = atlas.findRegion("exitbtn");
-        exitDownBtn = atlas.findRegion("exitdownbtn");
-        settingBtn = atlas.findRegion("settingbtn");
-        settingDownBtn = atlas.findRegion("settingdownbtn");
-        helpBtn = atlas.findRegion("helpbtn");
-        helpDownBtn = atlas.findRegion("helpdownbtn");
-        musicOpenBtn = atlas.findRegion("musicopenbtn");
-        musicCloseBtn = atlas.findRegion("musicclosebtn");
-        soundOpenBtn = atlas.findRegion("soundopenbtn");
-        soundCloseBtn = atlas.findRegion("soundclosebtn");
-        aboutBtn = atlas.findRegion("aboutbtn");
-        aboutDownBtn = atlas.findRegion("aboutdownbtn");
         resetGameBtn = atlas.findRegion("resetgamebtn");
-        resetGameDownBtn = atlas.findRegion("resetgamedownbtn");
         levelPreBtn = atlas.findRegion("levelpre");
         levelNextBtn = atlas.findRegion("levelnext");
 

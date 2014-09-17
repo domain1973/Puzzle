@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Administrator on 2014/7/20.
  */
-public class SupsendWin extends BaseWindow {
+public class SupsendWin extends BaseWin {
     private Puzzle puzzle;
     private GameScreen gameScreen;
     private float win_H;
@@ -98,13 +98,22 @@ public class SupsendWin extends BaseWindow {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (Settings.musicEnabled) {
-                    addActor(noMusic);
-                    Settings.musicEnabled = false;
-                } else {
-                    noMusic.remove();
-                    Settings.musicEnabled = true;
-                }
+                addActor(noMusic);
+                Settings.musicEnabled = false;
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+        noMusic.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                noMusic.remove();
+                Settings.musicEnabled = true;
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -117,13 +126,22 @@ public class SupsendWin extends BaseWindow {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (Settings.soundEnabled) {
-                    addActor(noSound);
-                    Settings.soundEnabled = false;
-                } else {
-                    noSound.remove();
-                    Settings.soundEnabled = true;
-                }
+                addActor(noSound);
+                Settings.soundEnabled = false;
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+        noSound.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                noSound.remove();
+                Settings.soundEnabled = true;
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -202,9 +220,9 @@ public class SupsendWin extends BaseWindow {
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         Runnable runner = new Runnable() {
             public void run() {
-               puzzle.getPEvent().spotAM();
+                puzzle.getPEvent().spotAM();
             }
         };
-        executor.scheduleAtFixedRate(runner, 15000, 15000, TimeUnit.MILLISECONDS);
+        executor.schedule(runner, 15000, TimeUnit.MILLISECONDS);
     }
 }

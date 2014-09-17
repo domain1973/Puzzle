@@ -8,11 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 /**
  * Created by Administrator on 2014/7/30.
  */
-public class BaseWindow extends Window {
+public class BaseWin extends Window {
 
     protected Image layerBg;
 
-    public BaseWindow(String title, WindowStyle style) {
+    public BaseWin(String title, WindowStyle style) {
         super(title, style);
         layerBg = new Image(Assets.layerBg);
         layerBg.setBounds(0, 0, Assets.WIDTH, Assets.HEIGHT);
