@@ -47,8 +47,9 @@ public class SettingScreen extends OtherScreen {
         float btn_y2 = btn_y - otherSize * 3;
         aboutBtn.setBounds(x, btn_y2, otherSize, otherSize);
         ImageButton resetGameBtn = new ImageButton(new TextureRegionDrawable(Assets.resetGameBtn), new TextureRegionDrawable(Assets.resetGameBtn));
-        float btn_y3 = btn_y - otherSize * 9/2;
-        resetGameBtn.setBounds(x, btn_y3, otherSize, otherSize);
+        float setSize = Assets.WIDTH /4;
+        float btn_y3 = btn_y - setSize * 3.5f;
+        resetGameBtn.setBounds((Assets.WIDTH - setSize) / 2, btn_y3, setSize, setSize);
 
         musicBtn.addListener(new InputListener() {
             @Override

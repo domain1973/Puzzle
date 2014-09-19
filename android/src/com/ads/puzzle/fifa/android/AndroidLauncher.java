@@ -61,13 +61,18 @@ public class AndroidLauncher extends AndroidApplication implements InitCallbackL
             public void exit() {
                 handler.post(new Runnable() {
                     public void run() {
-                        new AlertDialog.Builder(AndroidLauncher.this).setTitle(title).setMessage("确定要退出游戏吗?").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        new AlertDialog.Builder(AndroidLauncher.this).setTitle(title).setMessage("确定要退出游戏吗?")
+                       .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 save();
                                 AndroidLauncher.this.exit();
                             }
                         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }).setNeutralButton("爱迪出品", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                             }
@@ -80,7 +85,8 @@ public class AndroidLauncher extends AndroidApplication implements InitCallbackL
             public void sos(final GameScreen gs) {
                 handler.post(new Runnable() {
                     public void run() {
-                        new AlertDialog.Builder(AndroidLauncher.this).setTitle(title).setMessage("您还有" + Settings.helpNum + "次机会,需要帮助吗?").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        new AlertDialog.Builder(AndroidLauncher.this).setTitle(title).setMessage("您还有" + Settings.helpNum + "次机会,需要帮助吗?")
+                       .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Settings.helpNum = Settings.helpNum - 1;

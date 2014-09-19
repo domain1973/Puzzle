@@ -31,10 +31,17 @@ public class LevelScreen extends OtherScreen {
     private int level;
     private LevelListener levelListener;
     private float targetposition;
+    private float initPosition = Integer.MAX_VALUE;
     private boolean isAddLock;
 
     public LevelScreen(Puzzle puzzle) {
         super(puzzle);
+    }
+
+    public LevelScreen(Puzzle puzzle, int lv) {
+        super(puzzle);
+        level = lv;
+        initPosition = -Assets.WIDTH * level;
     }
 
     @Override
@@ -55,6 +62,9 @@ public class LevelScreen extends OtherScreen {
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(getStage());
         levelListener = new LevelListener(getStage(), getPuzzle());
+        if (initPosition != Integer.MAX_VALUE) {
+            levelListener.setPosition(initPosition);
+        }
         multiplexer.addProcessor(new LevelDetector(getStage(), levelListener));
         getStarLabel().setText("总计:" + getStarNum());
         Gdx.input.setInputProcessor(multiplexer);

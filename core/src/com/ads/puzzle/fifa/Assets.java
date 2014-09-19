@@ -87,7 +87,7 @@ public class Assets {
     public static int LEVEL_MAX = 6;
     public static float space = 10;
     public static Skin skin;
-    private static int levelNum = 2;
+    private final static int LEVELNUM = 7;
 
     public static void load() {
         initConstants();
@@ -171,7 +171,7 @@ public class Assets {
 
     private static void createLevelSprite(TextureAtlas atlas) {
         levelSpriteMap = new HashMap<Integer, List<Sprite>>();
-        for (int i = 1; i < levelNum; i++) {
+        for (int i = 1; i < LEVELNUM; i++) {
             int m = 0;
             List<Sprite> sprites = new ArrayList<Sprite>();
             while (m < 6) {

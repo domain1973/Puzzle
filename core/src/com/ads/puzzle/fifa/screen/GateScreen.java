@@ -30,7 +30,7 @@ public class GateScreen extends OtherScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y,
                                      int pointer, int button) {
-                getPuzzle().setScreen(new LevelScreen(getPuzzle()));
+                getPuzzle().setScreen(new LevelScreen(getPuzzle(), level));
                 return true;
             }
         });
@@ -70,7 +70,8 @@ public class GateScreen extends OtherScreen {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y,
                                          int pointer, int button) {
-                    if (gate.getGateNum() <= Settings.passGateNum) {
+                   // if (gate.getGateNum() <= Settings.passGateNum)
+                    {
                         getPuzzle().setScreen(new GameScreen(getPuzzle(), level, gate.getGateNum()));
                     }
                     return true;
